@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<title>TODO supply a title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link type="text/css" rel="stylesheet" href='calendar.css' />
+	</head>
+	<body>
+		<div id="cal" style="width:50%;"></div><br><br><br>
+		<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="calendar.js"></script>
+		<script>
+			
+			$(function(){
+				
+				$("#cal").calendar({
+					abbrDay: false,
+					abbrMonth: false,
+					onDayClick: function(date){
+						console.log(date);
+					},
+					events: [{
+						date: new Date(2016, 8, 22),
+						type: 'appointment',
+						desc: 'New Appt'
+					},{
+						date: new Date(2016, 8, 6),
+						type: 'appointment',
+						desc: 'New Appt'
+					}]
+				});
+				
+			});
+			
+		</script>
+	</body>
+</html>
