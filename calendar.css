@@ -13,16 +13,23 @@
 	Business: 7FD5FF
 */
 
+.CalendarJS{
+	margin:0;
+	padding: 0 4.5%;
+}
+
 .calHeader{
 	width:91%;
 	color: #2C7EAA;
+	margin:0;
+	padding:0;
 }
 
 .dayCol{
 	float:left;
     position: relative;
     width: 13%;
-    padding-bottom : 13%; /* = width for a 1:1 aspect ratio */
+    padding: 0% 0% 13% 0%; /* = width for a 1:1 aspect ratio */
     margin: 0 ;
 	border: 1px solid #2C7EAA;
     background-position:center center;
@@ -42,7 +49,8 @@
 }
 
 .dayHeaderCell{
-	padding:.25em;
+	padding:3px;
+	margin: 0; 
 }
 
 .dayContent{
@@ -50,17 +58,22 @@
 	position:absolute;
     height:90%; /* = 100% - 2*5% padding */
     width:90%; /* = 100% - 2*5% padding */
-    padding: 5%;
+    padding: 0;
+	margin:0;
 }
 
 .dayTable{
 	display:table;
     width:100%;
     height:100%;
+	margin: 5px;
 }
+
 .dayCell{
 	display:table-cell;
     vertical-align:top;
+	padding:0;
+	margin:0;
 }
 
 .blankday{
@@ -70,11 +83,15 @@
 .lastLink{
 	float:left;
 	font-size:0.8em;
+	margin:0;
+	padding:0;
 }
 
 .nextLink{
 	float:right;
 	font-size:0.8em;
+	margin:0;
+	padding:0;
 }
 
 .clearfix{
@@ -85,14 +102,8 @@
 	text-align:center;
 	font-size:1em;
 	font-weight: bold;
-}
-
-.lastLink:before{
-	content: "≪ ";
-}
-
-.nextLink:after{
-	content: " ≫";
+	margin:0;
+	padding:0;
 }
 
 .lastLink:hover, .nextLink:hover{
@@ -110,7 +121,7 @@
 }
 
 .calEvent{
-	padding-top: 3px;
+	margin: 0;
 	font-size:0.8em;
 	background: #8A98FF;
 	border-radius: 3px;

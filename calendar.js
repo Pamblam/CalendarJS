@@ -55,6 +55,10 @@
 			if(undefined!==opts.year) self.year = opts.year;
 			if(undefined!==opts.month) self.month = opts.month-1;
 		}
+		var classes = self.elem.getAttribute("class");
+		if(!classes) classes = "";
+		classes += " CalendarJS";
+		self.elem.setAttribute("class", classes);
 		self.drawCalendar();
 	};
 	
@@ -140,7 +144,7 @@
 		var monthName = self[monthArrayName][self.month];
 		var lastMo = self.monthsAbbr[self.month-1]?self.monthsAbbr[self.month-1]:self.monthsAbbr[11];
 		var nextMo = self.monthsAbbr[self.month+1]?self.monthsAbbr[self.month+1]:self.monthsAbbr[0];
-		self.elem.insertAdjacentHTML('beforeend', "<div class='weekRow calHeader'><div class='lastLink'>"+lastMo+"</div><div class='nextLink'>"+nextMo+"</div><div class='moTitle'>"+monthName+" "+year+"</div><div class='clearfix'></div></div>");
+		self.elem.insertAdjacentHTML('beforeend', "<div class='weekRow calHeader'><div class='lastLink'>&vltri; "+lastMo+"</div><div class='nextLink'>"+nextMo+" &vrtri;</div><div class='moTitle'>"+monthName+" "+year+"</div><div class='clearfix'></div></div>");
 
 		// Draw day labels
 		var dayArrayName = !self.abbrDay ? "daysOfWeekFull" : "daysOfWeekAbbr";
