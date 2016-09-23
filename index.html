@@ -10,31 +10,17 @@ and open the template in the editor.
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link type="text/css" rel="stylesheet" href='calendar.css' />
+		<style>
+			*{ font-family: Verdana, Geneva, sans-serif; }
+		</style>
 	</head>
 	<body>
-		<div id="cal" style="width:50%;"></div><br><br><br>
-		<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+		<div id="cal" style="width:50%;"></div><br>
 		<script src="calendar.js"></script>
 		<script>
 			
-			$(function(){
-				
-				$("#cal").calendar({
-					abbrDay: false,
-					abbrMonth: false,
-					onDayClick: function(date){
-						console.log(date);
-					},
-					events: [{
-						date: new Date(2016, 8, 22),
-						type: 'appointment',
-						desc: 'New Appt'
-					},{
-						date: new Date(2016, 8, 6),
-						type: 'appointment',
-						desc: 'New Appt'
-					}]
-				});
+			var ele = document.getElementById('cal');
+			var cal = new calendar(ele, {
 				
 			});
 			
