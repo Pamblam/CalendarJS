@@ -1,15 +1,21 @@
 
 /*
 	Theme Colors...
-	Light Color: 7689A9
-	Medium Light: 4D658D
-	Medium dark: 152D54
-	Dark color: 051938
+	Light Color: B8E6FF
+	Medium Light: 9FDDFF
+	Medium dark: 7FD2FF
+	Dark color: 2C7EAA
+
+	Event colors...
+	Default: 8A98FF
+	Appointment: FFC178
+	Meeting: 78FFB3
+	Business: 7FD5FF
 */
 
 .calHeader{
 	width:91%;
-	color: #051938;
+	color: #2C7EAA;
 }
 
 .dayCol{
@@ -18,21 +24,21 @@
     width: 13%;
     padding-bottom : 13%; /* = width for a 1:1 aspect ratio */
     margin: 0 ;
-	border: 1px solid #051938;
+	border: 1px solid #2C7EAA;
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover; 
 	overflow:hidden;
-	background-color: #7689A9;
+	background-color: #B8E6FF;
 }
 
 .dayHeader{
 	padding: 0;
-	font-weight:bold;
-	background-color: #7689A9;
-	color: #152D54;
+	font-size:0.8em;
+	background-color: #B8E6FF;
+	color: #2C7EAA;
 	text-align: center;
-	border-bottom: 3px solid #152D54;
+	border-bottom: 2px solid #2C7EAA;
 }
 
 .dayHeaderCell{
@@ -40,12 +46,13 @@
 }
 
 .dayContent{
-	color: #051938;
+	color: #2C7EAA;
 	position:absolute;
     height:90%; /* = 100% - 2*5% padding */
     width:90%; /* = 100% - 2*5% padding */
     padding: 5%;
 }
+
 .dayTable{
 	display:table;
     width:100%;
@@ -57,15 +64,17 @@
 }
 
 .blankday{
-	background-color: #4D658D;
+	background-color: #9FDDFF;
 }
 
 .lastLink{
 	float:left;
+	font-size:0.8em;
 }
 
 .nextLink{
 	float:right;
+	font-size:0.8em;
 }
 
 .clearfix{
@@ -74,7 +83,7 @@
 
 .moTitle{
 	text-align:center;
-	font-size: 110%;
+	font-size:1em;
 	font-weight: bold;
 }
 
@@ -88,10 +97,47 @@
 
 .lastLink:hover, .nextLink:hover{
 	cursor: pointer;
-	color: #7689A9;
+	color: #B8E6FF;
 }
 
 .calDay:hover{
-	background: #4D658D;
+	background: #9FDDFF;
 	cursor: pointer;
+}
+
+.dateLabel{
+	font-size:0.8em;
+}
+
+.calEvent{
+	padding-top: 3px;
+	font-size:0.8em;
+	background: #8A98FF;
+	border-radius: 3px;
+	padding: 1px 2px;
+}
+
+.appointment{
+	background: #FFC178;
+}
+
+.meeting{
+	background: #78FFB3;
+}
+
+.business{
+	background: #7FD5FF;
+}
+
+.ellipse {
+    display: table;
+    table-layout: fixed;
+    width: 98%;
+    white-space: nowrap;
+}
+ 
+.ellipse > * {
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

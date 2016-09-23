@@ -18,12 +18,12 @@ and open the template in the editor.
 		<div id="cal" style="width:50%;"></div><br>
 		<script src="calendar.js"></script>
 		<script>
-			
 			var ele = document.getElementById('cal');
-			var cal = new calendar(ele, {
-				
-			});
-			
+			var events = [{date: new Date(), desc:"Today!"}];
+			var cal = new calendar(ele, {events: events});
+			cal.onDayClick = function(date, events){
+				alert(events.length+" events on "+cal.monthsFull[date.getMonth()]+" "+date.getDate());
+			};
 		</script>
 	</body>
 </html>
