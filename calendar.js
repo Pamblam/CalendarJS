@@ -60,6 +60,7 @@
 		classes += " CalendarJS";
 		self.elem.setAttribute("class", classes);
 		self.drawCalendar();
+		self.elem.insertAdjacentHTML('afterend', "<div class='clearfix'></div>");
 	};
 	
 	// Create a DOM element
@@ -149,8 +150,12 @@
 		// Draw day labels
 		var dayArrayName = !self.abbrDay ? "daysOfWeekFull" : "daysOfWeekAbbr";
 		var dayNames = makeEle("div", {class: "dayRow weekRow"});
-		for(var i=0; i<self[dayArrayName].length; i++) 
-			dayNames.insertAdjacentHTML('beforeend', "<div class='dayCol dayHeader'><div class='dayHeaderCell'>"+self[dayArrayName][i]+"</div></div>");
+		for(var i=0; i<self[dayArrayName].length; i++){ 
+			var directionalClass = "";
+			if(i===6) directionalClass = " right top-right";
+			if(i===0) directionalClass += " top-left";
+			dayNames.insertAdjacentHTML('beforeend', "<div class='dayCol left top bottom dayHeader"+directionalClass+"'><div class='dayHeaderCell'>"+self[dayArrayName][i]+"</div></div>");
+		}
 		self.elem.appendChild(dayNames);
 
 		// Draw days
@@ -162,7 +167,7 @@
 
 			// draw days before the 1st of the month
 			while(currentDate===1&&currentDay<firstDayofWeek){
-				week.insertAdjacentHTML('beforeend', "<div class='dayCol blankday'><div class='dayContent'><div class='dayTable'><div class='dayCell'></div></div></div></div>");
+				week.insertAdjacentHTML('beforeend', "<div class='dayCol blankday bottom left'><div class='dayContent'><div class='dayTable'><div class='dayCell'></div></div></div></div>");
 				currentDay++;
 			}
 
@@ -198,21 +203,31 @@
 							var cls = (undefined===self.events[n].type) ? "" : " "+self.events[n].type;
 							var desc = self.events[n].desc;
 							if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-							evt += "<div class='calEvent"+cls+"'>"+desc+"</div>";
+							evt += "<div class='calWrapper'><div class='calEvent"+cls+"'>"+desc+"</div></div>";
 							evtids.push(n);
 						}
 					}
 				}
-
+				var directionalClass = "";
+				if(currentDay===6) directionalClass = " right";
+				if((lastDate-currentDate)<7){
+					if(currentDay===0) directionalClass += " bottom-left";
+					if(currentDay===6&&currentDate===lastDate) directionalClass += " bottom-right";
+				} 
 				// draw day
-				week.insertAdjacentHTML('beforeend', "<div class='dayCol'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> "+evt+"</div></div></div></div>");
+				week.insertAdjacentHTML('beforeend', "<div class='dayCol bottom left"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> "+evt+"</div></div></div></div>");
 				currentDate++;
 				currentDay++;
 			}
 
 			// draw empty days after last day of month
+			var first_post_empty = true;
 			while(currentDay<7){
-				week.insertAdjacentHTML('beforeend', "<div class='dayCol blankday'><div class='dayContent'><div class='dayTable'><div class='dayCell'></div></div></div></div>");
+				var directionalClass = "";
+				if(first_post_empty) directionalClass = " left";
+				if(currentDay===6) directionalClass += " right bottom-right";
+				first_post_empty = false;
+				week.insertAdjacentHTML('beforeend', "<div class='dayCol blankday bottom"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell'></div></div></div></div>");
 				currentDay++;
 			}
 

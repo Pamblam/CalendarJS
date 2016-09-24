@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
 	<head>
-		<title>TODO supply a title</title>
+		<title>CalendarJS</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link type="text/css" rel="stylesheet" href='calendar.css' />
@@ -15,12 +10,15 @@ and open the template in the editor.
 		</style>
 	</head>
 	<body>
-		<div id="cal" style="width:50%;"></div><br>
+		<center>
+			<h3>Calendar  Demo</h3>
+			<div id="cal" style="width:50%;"></div>
+		</center>
 		<script src="calendar.js"></script>
 		<script>
 			var ele = document.getElementById('cal');
 			var events = [{date: new Date(), desc:"Today!"}];
-			var cal = new calendar(ele, {events: events});
+			var cal = new calendar(ele, {events: events, abbrMonth:true});
 			cal.onDayClick = function(date, events){
 				alert(events.length+" events on "+cal.monthsFull[date.getMonth()]+" "+date.getDate());
 			};

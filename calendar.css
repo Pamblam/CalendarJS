@@ -15,23 +15,58 @@
 
 .CalendarJS{
 	margin:0;
-	padding: 0 4.5%;
+	padding: 0;
 }
 
 .calHeader{
-	width:91%;
+	width:100%;
 	color: #2C7EAA;
 	margin:0;
 	padding:0;
 }
 
+.right{
+	border-right: 1px solid #7FD2FF;
+	box-sizing: border-box;
+}
+
+.top{
+	border-top: 1px solid #7FD2FF;
+	box-sizing: border-box;
+}
+
+.left{
+	border-left: 1px solid #7FD2FF;
+	box-sizing: border-box;
+}
+
+.bottom{
+	border-bottom: 1px solid #7FD2FF;
+	box-sizing: border-box;
+}
+
+.top-left{
+	border-top-left-radius: 3px;
+}
+
+.top-right{
+	border-top-right-radius: 3px;
+}
+
+.bottom-left{
+	border-bottom-left-radius: 3px;
+}
+
+.bottom-right{
+	border-bottom-right-radius: 3px;
+}
+
 .dayCol{
 	float:left;
     position: relative;
-    width: 13%;
-    padding: 0% 0% 13% 0%; /* = width for a 1:1 aspect ratio */
-    margin: 0 ;
-	border: 1px solid #2C7EAA;
+    width: 14.2857142857%;
+    padding: 0% 0% 14.2857142857% 0%; /* = width for a 1:1 aspect ratio */
+    margin: 0;
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover; 
@@ -45,7 +80,6 @@
 	background-color: #B8E6FF;
 	color: #2C7EAA;
 	text-align: center;
-	border-bottom: 2px solid #2C7EAA;
 }
 
 .dayHeaderCell{
