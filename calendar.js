@@ -2,6 +2,7 @@
 
 ;window.calendar = function(elem, opts) {
 	var self = this;
+	var _eventGroups = [];
 	
 	////////////////////////////////////////////////////////////////////////////
 	// User config /////////////////////////////////////////////////////////////
@@ -107,18 +108,194 @@
 		self.onDayClick(date, evts);
 	};
 	
+	var positionEventGroups = function(){
+		var eventPositions = {}; // available positions within the display area
+		var otherEvents = {}; // events that don't fit in the display area
+		for(var i=0; i<_eventGroups.length; i++){
+			var e = _eventGroups[i];
+			var ele = self.elem.getElementsByClassName('calEvent'+i)[0];
+			
+			var dayCellHt = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().height;
+			var dayColHt = self.elem.getElementsByClassName("dayCol")[7].getBoundingClientRect().height;
+			var dayColWd = self.elem.getElementsByClassName("dayCol")[7].getBoundingClientRect().width;
+			var dateLabelHeight = self.elem.getElementsByClassName("dateLabel")[0].getBoundingClientRect().height;
+			
+			var evtHtOffset = ele.getBoundingClientRect().height+2;
+			var hdrOffset = self.elem.getElementsByClassName("dayHeaderCell")[0].getBoundingClientRect().height;
+			var paddingOffset = Math.floor((dayColHt-dayCellHt)/2);
+			
+			var top = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4;
+			var left = 1+paddingOffset+(dayColWd*e.start);
+			var width = ((e.end-e.start+1)*dayColWd)-(paddingOffset*3);
+			
+			// used calculate bottom of the display area
+			var bottomBorder = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dayCellHt;
+			
+			// get the lowest event position available for every date in event
+			var posit = false;
+			var allAvail = [];
+			for(var n=e.startdayid; n<=e.enddayid; n++){
+				if(!eventPositions.hasOwnProperty(n)) eventPositions[n]=[];
+				// get the lowest available event position for this day
+				for(var x=0; x<=eventPositions[n].length; x++){
+					if(undefined===eventPositions[n][x]) eventPositions[n][x] = 0;
+					if(eventPositions[n][x]===0){
+						allAvail.push(x); 
+						break;
+					}
+				}
+			}
+			for(var aa=allAvail.length;aa--;){
+				if(posit===false) posit = allAvail[aa];
+				if(allAvail[aa]>posit) posit = allAvail[aa];
+			}
+			
+			// posit is now the lowest position available for every date
+			// make sure it fits
+			var eventBottom = top+(evtHtOffset*(1+posit))-2;
+			if(eventBottom>bottomBorder){
+				// event doesn't fit
+				
+				var newendid = e.startdayid;
+				var newend=e.start;
+				var lastPositAvailable = false;
+				
+				//see if event fits in any of the other cols
+				// if so shrink this one, reset the starting pos
+				//add "other events" counter to upper right of this date
+
+				// there is a position above, check if it's available
+				if(posit>0){
+
+					// get the first available position for the first day of the event
+					for(var p=posit;p--;) 
+						if(eventPositions[e.startdayid][p]===0) 
+						lastPositAvailable=p;
+
+					// if a higher position is available for the first date
+					if(lastPositAvailable!==false){
+
+						// check subsequent dates to see if the same position is available
+						// to figure out new end date
+						for(var n=e.startdayid; n<=e.enddayid; n++){
+							if(undefined===eventPositions[n][lastPositAvailable]) 
+								eventPositions[n][lastPositAvailable] = 0;
+							
+							// if this position is available for this day too
+							// increase the enddate, else break at the existing end date
+							if(eventPositions[n][lastPositAvailable]===0){ 
+								newendid++;
+								newend++;
+							}else{
+								newendid--;
+								newend--;
+								break;
+							}
+						}
+
+					}
+
+				}
+				
+				// check newend and newposit and adjust event if possible
+				// or else add a +1 to the "other events" counter for this day
+				if(lastPositAvailable===false){
+					// no positions are available for this day
+					// add +1 to "other events" counter for this day ..check
+					// and if the is another day in the event 
+					// make the current _eventGroups start one day later 
+					// and do i-- and continue the loop so it will be iterated over again
+					
+					if(undefined===otherEvents[e.startdayid]) 
+						otherEvents[e.startdayid] = 0;
+					otherEvents[e.startdayid]++;
+					
+					if(_eventGroups[i].startdayid<_eventGroups[i].enddayid){
+						_eventGroups[i].startdayid++;
+						_eventGroups[i].start++;
+						i--;
+					}else{
+						// there are no more days to show, hide the event
+						ele.classList.add('hidden');
+					}
+					continue;
+				}else{
+					// we have a partial fit
+					// make the current _eventGroups end on the new end date (adjust the width, top)
+					// then add a new event group starting one day later in case there are other spaces available
+					// on the other side of the full day
+					// also, update eventPositions to show taken dates
+					
+					if(ele.classList.contains('hidden'))
+						ele.classList.remove('hidden');
+					
+					var oldendid = _eventGroups[i].enddayid;
+					var oldend = _eventGroups[i].end;
+					
+					_eventGroups[i].enddayid=newendid;
+					_eventGroups[i].end=newend;
+					
+					width = ((newend-e.start+1)*dayColHt)-(paddingOffset*3);
+					posit = lastPositAvailable;
+					
+					var egid = _eventGroups.length;
+					_eventGroups.push({
+						enddayid: oldendid,
+						end: oldend,
+						startdayid: newendid+1,
+						start: newend+1,
+						event: _eventGroups[i].event,
+						week: _eventGroups[i].week
+					});
+					
+					var cls = (undefined===_eventGroups[i].event.type) ? "" : " "+_eventGroups[i].event.type;
+					var desc = _eventGroups[i].event.desc;
+					if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
+					var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+					var week = self.elem.getElementsByClassName("calweekid"+_eventGroups[i].week)[0];
+					week.insertAdjacentHTML('beforeend', evt);
+					
+					e = _eventGroups[i];
+					for(var n=e.startdayid; n<=e.enddayid; n++) 
+						eventPositions[n][lastPositAvailable] = 1;
+					
+				}
+				
+			}else{
+				// the event fits completely,
+				// update eventPositions for every day in the eventgroup
+				// no adjustmetns are needed
+				
+				if(ele.classList.contains('hidden'))
+					ele.classList.remove('hidden');
+				for(var n=e.startdayid; n<=e.enddayid; n++) 
+					eventPositions[n][posit] = 1;
+			}
+			
+			//adjust top position for other events
+			if(posit!==0) top += (evtHtOffset*posit);
+			
+			ele.style.top = top+"px";
+			ele.style.left = left+"px";
+			ele.style.width = width+"px";
+		}
+		
+		// Draw otherEvents for events that didnt fit in the display
+		console.log("draw otherEvents", otherEvents);
+	};
+	
 	// Set all calendar event handlers
 	var setCalendarEvents = function(){
 		
-		var lastLink = document.getElementsByClassName("lastLink")[0];
+		var lastLink = self.elem.getElementsByClassName("lastLink")[0];
 		removeEvent(lastLink, 'click', _loadNextMonth);
 		addEvent(lastLink, 'click', _loadNextMonth);
 		
-		var nextLink = document.getElementsByClassName("nextLink")[0];
+		var nextLink = self.elem.getElementsByClassName("nextLink")[0];
 		removeEvent(nextLink, 'click', _loadLastMonth);
 		addEvent(nextLink, 'click', _loadLastMonth);
 		
-		var calDays = document.getElementsByClassName("calDay");
+		var calDays = self.elem.getElementsByClassName("calDay");
 		for(var i=calDays.length; i--;){
 			removeEvent(calDays[i], 'click', _dayClicked);
 			addEvent(calDays[i], 'click', _dayClicked);
@@ -138,6 +315,7 @@
 		var lastDate = new Date(self.year, self.month+1, 0).getDate();
 		var currentDate = 1;
 		var currentDay = 0;
+		var currentWeek = 0;
 
 		// draw title bar
 		var year = self.abbrYear?"'"+self.year.substr(2,2):self.year;
@@ -158,12 +336,12 @@
 		}
 		self.elem.appendChild(dayNames);
 
-		// Draw days
+		// Loop through weeks
 		while(currentDate<=lastDate){
 			currentDay = 0;
 
 			// draw a div for the week
-			var week = makeEle("div", {class: "weekRow"});
+			var week = makeEle("div", {class: "weekRow calweekid"+currentWeek});
 
 			// draw days before the 1st of the month
 			while(currentDate===1&&currentDay<firstDayofWeek){
@@ -171,26 +349,36 @@
 				currentDay++;
 			}
 
-			// draw days of the month
+			// Store the events
+			var weekEvents = {};
+			var dayEvents = {};
+			
+			// loop through days
 			while(currentDay<7&&currentDate<=lastDate){
 
 				// get events
-				var evt = "";
 				var evtids = [];
 				for(var n=0; n<self.events.length; n++) {	
 					if(!self.events[n].hasOwnProperty('date')){
 						var morn = +(new Date(self.year, self.month, currentDate, 0, 0, 0));
 						var night = +(new Date(self.year, self.month, currentDate, 23, 59, 59));
+						var eventStart = +self.events[n].startDate;
+						var eventEnd = +self.events[n].endDate;
 						
-						var startsToday = (+self.events[n].startDate>=morn && +self.events[n].startDate<=night);
-						var endsToday = (+self.events[n].endDate>=morn && +self.events[n].endDate<=night);
-						var continuesToday = (+self.events[n].startDate<morn && +self.events[n].endDate>night);
+						var startsToday = (eventStart>=morn && eventStart<=night);
+						var endsToday = (eventEnd>=morn && eventEnd<=night);
+						var continuesToday = (eventStart<morn && eventEnd>night);
 						
 						if(startsToday || endsToday || continuesToday){
-							var cls = (undefined===self.events[n].type) ? "" : " "+self.events[n].type;
-							var desc = self.events[n].desc;
-							if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-							evt += "<div class='calEvent"+cls+"'>"+desc+"</div>";
+							if(!weekEvents.hasOwnProperty(n)) weekEvents[n] = {event:self.events[n]};
+							if(startsToday){
+								weekEvents[n].start=currentDay;
+								weekEvents[n].startdayid=currentDate;
+							}
+							if(currentDay===6||endsToday){
+								weekEvents[n].end=currentDay;
+								weekEvents[n].enddayid=currentDate;
+							}
 							evtids.push(n);
 						}
 					}else{
@@ -200,10 +388,7 @@
 						var dayMatches = (self.events[n].date.getDate()===currentDate);
 						
 						if(yearMatches && monthMatches && dayMatches){
-							var cls = (undefined===self.events[n].type) ? "" : " "+self.events[n].type;
-							var desc = self.events[n].desc;
-							if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-							evt += "<div class='calWrapper'><div class='calEvent"+cls+"'>"+desc+"</div></div>";
+							if(!dayEvents.hasOwnProperty(n)) dayEvents[n] = {event:self.events[n], startdayid:currentDate, enddayid:currentDate, start:currentDay, end:currentDay};
 							evtids.push(n);
 						}
 					}
@@ -215,27 +400,64 @@
 					if(currentDay===6&&currentDate===lastDate) directionalClass += " bottom-right";
 				} 
 				// draw day
-				week.insertAdjacentHTML('beforeend', "<div class='dayCol bottom left"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> "+evt+"</div></div></div></div>");
+				week.insertAdjacentHTML('beforeend', "<div class='dayCol bottom left"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> </div></div></div></div>");
 				currentDate++;
 				currentDay++;
 			}
 
 			// draw empty days after last day of month
-			var first_post_empty = true;
 			while(currentDay<7){
-				var directionalClass = "";
-				if(first_post_empty) directionalClass = " left";
+				var directionalClass = " left";
 				if(currentDay===6) directionalClass += " right bottom-right";
-				first_post_empty = false;
 				week.insertAdjacentHTML('beforeend', "<div class='dayCol blankday bottom"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell'></div></div></div></div>");
 				currentDay++;
 			}
-
+			
 			self.elem.appendChild(week);
+			
+			// Draw weekEvents, dayEvents
+			for(var eid in weekEvents){
+				if(!weekEvents.hasOwnProperty(eid)) continue;
+				
+				if(!weekEvents[eid].hasOwnProperty("start")){
+					weekEvents[eid].start = 0;
+					weekEvents[eid].startdayid=weekEvents[eid].enddayid-weekEvents[eid].end;
+				}
+				weekEvents[eid].week = currentWeek;
+				
+				var egid = _eventGroups.length;
+				_eventGroups.push(weekEvents[eid]);
+				
+				var cls = (undefined===self.events[eid].type) ? "" : " "+self.events[eid].type;
+				var desc = self.events[eid].desc;
+				if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
+				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+				week.insertAdjacentHTML('beforeend', evt);
+				
+			}
+			
+			for(var eid in dayEvents){
+				if(!dayEvents.hasOwnProperty(eid)) continue;
 
+				dayEvents[eid].week = currentWeek;
+				
+				var egid = _eventGroups.length;
+				_eventGroups.push(dayEvents[eid]);
+				
+				var cls = (undefined===self.events[eid].type) ? "" : " "+self.events[eid].type;
+				var desc = self.events[eid].desc;
+				if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
+				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+				week.insertAdjacentHTML('beforeend', evt);
+				
+			}
+			
+			currentWeek++;
+			
 		}
 
 		setCalendarEvents();
+		positionEventGroups();
 	};
 
 	// Call the constructor

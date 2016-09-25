@@ -7,10 +7,10 @@
 	Dark color: 2C7EAA
 
 	Event colors...
-	Default: 8A98FF
-	Appointment: FFC178
-	Meeting: 78FFB3
-	Business: 7FD5FF
+	Default: rgba(0, 153, 153, .4)
+	Appointment: rgba(255, 0, 0, .4)
+	Meeting: rgba(255, 116, 0, .4)
+	Business: rgba(0, 204, 0, .4)
 */
 
 .CalendarJS{
@@ -61,6 +61,10 @@
 	border-bottom-right-radius: 3px;
 }
 
+.hidden{
+	display:none !important;
+}
+
 .dayCol{
 	float:left;
     position: relative;
@@ -72,6 +76,7 @@
     background-size:cover; 
 	overflow:hidden;
 	background-color: #B8E6FF;
+	text-align: left;
 }
 
 .dayHeader{
@@ -152,26 +157,34 @@
 
 .dateLabel{
 	font-size:0.8em;
+	margin:0;
+	padding:0;
 }
 
 .calEvent{
-	margin: 0;
-	font-size:0.8em;
-	background: #8A98FF;
+	position: absolute;
+	top:0px;
+	left:0px;
+	width:10px;
+	z-index: 9999999999;
+	font-size:0.7em;
+	background: rgba(0, 153, 153, .4);
 	border-radius: 3px;
 	padding: 1px 2px;
+	color: #212121;
+	text-align:center;
 }
 
 .appointment{
-	background: #FFC178;
+	background: rgba(255, 0, 0, .4);
 }
 
 .meeting{
-	background: #78FFB3;
+	background: rgba(255, 116, 0, .4);
 }
 
 .business{
-	background: #7FD5FF;
+	background: rgba(0, 204, 0, .4);
 }
 
 .ellipse {
@@ -185,4 +198,8 @@
     display: table-cell;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.weekRow{
+	position:relative;
 }
