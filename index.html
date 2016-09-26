@@ -31,6 +31,8 @@
 				{date: new Date(2016, 8, 11), desc:"Evt 1"},
 				{startDate: new Date(2016, 8, 10), type: "appointment", endDate: new Date(2016, 8, 13), desc:"Evt 2"},
 				{startDate: new Date(2016, 8, 12), type: "meeting", endDate: new Date(2016, 8, 15), desc:"Evt 3"},
+				{startDate: new Date(2016, 8, 12), type: "meeting", endDate: new Date(2016, 8, 15), desc:"Evt 3"},
+				{startDate: new Date(2016, 8, 12), type: "business", endDate: new Date(2016, 8, 15), desc:"Evt 4"},
 				{startDate: new Date(2016, 8, 12), type: "business", endDate: new Date(2016, 8, 15), desc:"Evt 4"},
 				{startDate: new Date(2016, 8, 11), endDate: new Date(2016, 8, 18), desc:"Evt 5"}
 			];
@@ -38,6 +40,9 @@
 			var cal = new calendar(ele, {events: events, abbrMonth:true});
 			cal.onDayClick = function(date, events){
 				alert(events.length+" events on "+cal.monthsFull[date.getMonth()]+" "+date.getDate());
+			};
+			cal.onEventClick = function(evt){
+				alert(evt.desc);
 			};
 		</script>
 	</body>

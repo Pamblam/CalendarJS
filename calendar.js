@@ -13,6 +13,7 @@
 	self.abbrMonth = false;
 	self.abbrYear = false;
 	self.onDayClick = function(){};
+	self.onEventClick = function(){};
 	self.events = [];
 	self.month = (new Date()).getMonth();
 	self.year = (new Date()).getFullYear();
@@ -50,6 +51,7 @@
 			}
 			if(undefined!==opts.abbrDay) self.abbrDay = opts.abbrDay;
 			if(undefined!==opts.onDayClick) self.onDayClick = opts.onDayClick;
+			if(undefined!==opts.onEventClick) self.onEventClick = opts.onEventClick;
 			if(undefined!==opts.abbrMonth) self.abbrMonth = opts.abbrMonth;
 			if(undefined!==opts.abbrYear) self.abbrMonth = opts.abbrYear;
 			if(undefined!==opts.abbrMonth) self.abbrMonth = opts.abbrMonth;
@@ -108,11 +110,17 @@
 		self.onDayClick(date, evts);
 	};
 	
+	var _eventClicked = function(){
+		var evtid = this.getAttribute('data-eventid');
+		self.onEventClick(self.events[evtid]);
+	};
+	
 	var positionEventGroups = function(){
 		var eventPositions = {}; // available positions within the display area
 		var otherEvents = {}; // events that don't fit in the display area
 		for(var i=0; i<_eventGroups.length; i++){
 			var e = _eventGroups[i];
+			
 			var ele = self.elem.getElementsByClassName('calEvent'+i)[0];
 			
 			var dayCellHt = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().height;
@@ -127,7 +135,7 @@
 			
 			var hPaddingOffset = Math.floor((dayColWd-dayCellWd)/2);
 			
-			var top = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4;
+			var top = 5+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4;
 			var left = 1+paddingOffset+(dayColWd*e.start);
 			var width = ((e.end-e.start+1)*dayColWd)-(paddingOffset*3);
 			
@@ -254,7 +262,7 @@
 					var cls = (undefined===_eventGroups[i].event.type) ? "" : " "+_eventGroups[i].event.type;
 					var desc = _eventGroups[i].event.desc;
 					if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-					var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+					var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' data-eventid='"+_eventGroups[egid].eventid+"'>"+desc+"</div>";
 					var week = self.elem.getElementsByClassName("calweekid"+_eventGroups[i].week)[0];
 					week.insertAdjacentHTML('beforeend', evt);
 					
@@ -284,12 +292,15 @@
 		}
 		
 		// Draw otherEvents for events that didnt fit in the display
-		console.log("draw otherEvents", otherEvents);
+		for(var date in otherEvents){
+			if(!otherEvents.hasOwnProperty(date)) continue;
+			var d = self.elem.getElementsByClassName("dayCell"+date)[0];
+			d.insertAdjacentHTML('beforeend', '<div class="otherEvents">+'+otherEvents[date]+'</div>');
+		}
 	};
 	
 	// Set all calendar event handlers
 	var setCalendarEvents = function(){
-		
 		var lastLink = self.elem.getElementsByClassName("lastLink")[0];
 		removeEvent(lastLink, 'click', _loadNextMonth);
 		addEvent(lastLink, 'click', _loadNextMonth);
@@ -303,6 +314,12 @@
 			removeEvent(calDays[i], 'click', _dayClicked);
 			addEvent(calDays[i], 'click', _dayClicked);
 		}
+		
+		var events = self.elem.getElementsByClassName('calEvent');
+		for(var i=events.length; i--;){
+			removeEvent(events[i], 'click', _eventClicked);
+			addEvent(events[i], 'click', _eventClicked);
+		}
 	};
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -313,7 +330,8 @@
 	self.drawCalendar = function(){ 
 		// clear the element
 		self.elem.innerHTML = "";
-
+		_eventGroups = [];
+		
 		var firstDayofWeek = new Date(self.year, self.month, 1).getDay();
 		var lastDate = new Date(self.year, self.month+1, 0).getDate();
 		var currentDate = 1;
@@ -373,7 +391,7 @@
 						var continuesToday = (eventStart<morn && eventEnd>night);
 						
 						if(startsToday || endsToday || continuesToday){
-							if(!weekEvents.hasOwnProperty(n)) weekEvents[n] = {event:self.events[n]};
+							if(!weekEvents.hasOwnProperty(n)) weekEvents[n] = {event:self.events[n], eventid:n};
 							if(startsToday){
 								weekEvents[n].start=currentDay;
 								weekEvents[n].startdayid=currentDate;
@@ -391,7 +409,7 @@
 						var dayMatches = (self.events[n].date.getDate()===currentDate);
 						
 						if(yearMatches && monthMatches && dayMatches){
-							if(!dayEvents.hasOwnProperty(n)) dayEvents[n] = {event:self.events[n], startdayid:currentDate, enddayid:currentDate, start:currentDay, end:currentDay};
+							if(!dayEvents.hasOwnProperty(n)) dayEvents[n] = {event:self.events[n], startdayid:currentDate, enddayid:currentDate, start:currentDay, end:currentDay, eventid:n};
 							evtids.push(n);
 						}
 					}
@@ -403,7 +421,7 @@
 					if(currentDay===6&&currentDate===lastDate) directionalClass += " bottom-right";
 				} 
 				// draw day
-				week.insertAdjacentHTML('beforeend', "<div class='dayCol bottom left"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> </div></div></div></div>");
+				week.insertAdjacentHTML('beforeend', "<div class='dayCol bottom left"+directionalClass+"'><div class='dayContent'><div class='dayTable'><div class='dayCell calDay dayCell"+currentDate+"' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='dateLabel'>"+currentDate+"</span> </div></div></div></div>");
 				currentDate++;
 				currentDay++;
 			}
@@ -434,7 +452,7 @@
 				var cls = (undefined===self.events[eid].type) ? "" : " "+self.events[eid].type;
 				var desc = self.events[eid].desc;
 				if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top' data-eventid='"+_eventGroups[egid].eventid+"'>"+desc+"</div>";
 				week.insertAdjacentHTML('beforeend', evt);
 				
 			}
@@ -450,7 +468,7 @@
 				var cls = (undefined===self.events[eid].type) ? "" : " "+self.events[eid].type;
 				var desc = self.events[eid].desc;
 				if(self.ellipse) desc = "<span>"+desc+"</span>", cls+=" ellipse";
-				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top'>"+desc+"</div>";
+				var evt = "<div class='calEvent"+egid+" calEvent"+cls+"' style='top' data-eventid='"+_eventGroups[egid].eventid+"'>"+desc+"</div>";
 				week.insertAdjacentHTML('beforeend', evt);
 				
 			}

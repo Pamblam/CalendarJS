@@ -129,18 +129,32 @@
 	float:left;
 	font-size:0.8em;
 	margin:0;
-	padding:0;
+	background: #9FDDFF;
+	border-radius: 3px;
+	padding: 1px 5px;
+	color: #2C7EAA;
+	border: 1px solid #7FD2FF;
+	box-sizing: border-box;
+	font-weight:600;
 }
 
 .nextLink{
 	float:right;
 	font-size:0.8em;
 	margin:0;
-	padding:0;
+	background: #9FDDFF;
+	border-radius: 3px;
+	padding: 1px 5px;
+	color: #2C7EAA;
+	border: 1px solid #7FD2FF;
+	box-sizing: border-box;
+	font-weight:600;
 }
 
 .clearfix{
 	clear:both;
+	margin:0;
+	padding:1px;
 }
 
 .moTitle{
@@ -153,7 +167,7 @@
 
 .lastLink:hover, .nextLink:hover{
 	cursor: pointer;
-	color: #B8E6FF;
+	color: #212121;
 }
 
 .calDay:hover{
@@ -165,6 +179,17 @@
 	font-size:0.8em;
 	margin:0;
 	padding:0;
+}
+
+.otherEvents{
+	margin:0;
+	padding:0;
+	float: right;
+	font-size:0.7em;
+	background: #7FD2FF;
+	border-radius: 99px;
+	padding: 1px 2px;
+	color: #212121;
 }
 
 .calEvent{
@@ -180,6 +205,7 @@
 	color: #212121;
 	text-align:center;
 	margin:initial;
+	cursor: pointer;
 }
 
 .appointment{
@@ -209,4 +235,5 @@
 
 .weekRow{
 	position:relative;
+	margin:0; padding:0;
 }
