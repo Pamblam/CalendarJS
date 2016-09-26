@@ -175,6 +175,11 @@
 	cursor: pointer;
 }
 
+.active{
+	background: #7FD2FF;
+	border-color: #B8E6FF;
+}
+
 .dateLabel{
 	font-size:0.8em;
 	margin:0;
@@ -197,7 +202,6 @@
 	top:0px;
 	left:0px;
 	width:10px;
-	z-index: 9999999999;
 	font-size:0.7em;
 	background: rgba(0, 153, 153, .4);
 	border-radius: 3px;

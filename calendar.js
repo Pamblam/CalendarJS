@@ -3,6 +3,7 @@
 ;window.calendar = function(elem, opts) {
 	var self = this;
 	var _eventGroups = [];
+	var selectedDates = [];
 	
 	////////////////////////////////////////////////////////////////////////////
 	// User config /////////////////////////////////////////////////////////////
@@ -325,6 +326,77 @@
 	////////////////////////////////////////////////////////////////////////////
 	// Public methods //////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
+	
+	// Get all events that occur during a certain day or date-range
+	self.getEventsDuring = function(date1, date2){
+		if(undefined === date2) date2 = date1;
+		var lowdate = +date1>+date2 ? date2 : date1;
+		var highdate = +date1>+date2 ? date1 : date2;
+		
+		var morn = +(new Date(lowdate.getFullYear(), lowdate.getMonth(), lowdate.getDate(), 0, 0, 0));
+		var night = +(new Date(highdate.getFullYear(), highdate.getMonth(), highdate.getDate(), 23, 59, 59));
+				
+		var result = [];
+		for(var i=0; i<self.events.length; i++){
+			if(self.events[i].hasOwnProperty("startDate")){
+				var eventStart = +self.events[i].startDate;
+				var eventEnd = +self.events[i].endDate;
+			}else{
+				var eventStart = +self.events[i].date;
+				var eventEnd = +self.events[i].date;
+			}
+			var startsToday = (eventStart>=morn && eventStart<=night);
+			var endsToday = (eventEnd>=morn && eventEnd<=night);
+			var continuesToday = (eventStart<morn && eventEnd>night);
+			
+			if(startsToday || endsToday || continuesToday) 
+				result.push(self.events[i]);
+		}
+		return result;
+	};
+	
+	// Clear selected dates
+	self.clearSelection = function(){
+		var active = self.elem.getElementsByClassName("active");
+		for(var i=active.length; i--;)
+			active[i].classList.remove('active');
+		selectedDates = [];
+	};
+	
+	// Select a date for use as a calendar picker
+	self.selectDate = function(date){
+		if(self.month !== date.getMonth()) return;
+		if(self.year !== date.getFullYear()) return;
+		self.elem.getElementsByClassName("dayCell"+(date.getDate()))[0]
+			.parentNode.parentNode.parentNode.classList.add("active");
+		selectedDates.push({
+			day: date.getDate(),
+			month: date.getMonth(),
+			year: date.getFullYear()
+		});
+	};
+	
+	// Select a range of dates
+	self.selectDateRange = function(date1, date2){
+		if(self.month !== date1.getMonth()) return;
+		if(self.year !== date1.getFullYear()) return;
+		if(self.month !== date2.getMonth()) return;
+		if(self.year !== date2.getFullYear()) return;
+
+		var lowdate = +date1>+date2 ? date2.getDate() : date1.getDate();
+		var highdate = +date1>+date2 ? date1.getDate() : date2.getDate();
+		
+		for(var i=lowdate; i<=highdate; i++)
+			self.selectDate(new Date(self.year, self.month, i));
+	};
+	
+	// Get all selected dates
+	self.getSelection = function(){
+		var sel = [];
+		for(var i=0; i<selectedDates.length; i++) 
+			sel.push(new Date(selectedDates[i].year, selectedDates[i].month, selectedDates[i].day));
+		return sel;
+	};
 	
 	// Draw month calendar
 	self.drawCalendar = function(){ 
