@@ -47,18 +47,22 @@
 
 .top-left{
 	border-top-left-radius: 3px;
+	box-sizing: border-box;
 }
 
 .top-right{
 	border-top-right-radius: 3px;
+	box-sizing: border-box;
 }
 
 .bottom-left{
 	border-bottom-left-radius: 3px;
+	box-sizing: border-box;
 }
 
 .bottom-right{
 	border-bottom-right-radius: 3px;
+	box-sizing: border-box;
 }
 
 .hidden{
@@ -81,6 +85,7 @@
 
 .dayHeader{
 	padding: 0;
+	margin:0;
 	font-size:0.8em;
 	background-color: #B8E6FF;
 	color: #2C7EAA;
@@ -106,6 +111,7 @@
     width:100%;
     height:100%;
 	margin: 5px;
+	padding:0;
 }
 
 .dayCell{
@@ -173,6 +179,7 @@
 	padding: 1px 2px;
 	color: #212121;
 	text-align:center;
+	margin:initial;
 }
 
 .appointment{

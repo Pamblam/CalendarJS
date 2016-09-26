@@ -116,6 +116,7 @@
 			var ele = self.elem.getElementsByClassName('calEvent'+i)[0];
 			
 			var dayCellHt = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().height;
+			var dayCellWd = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().width;
 			var dayColHt = self.elem.getElementsByClassName("dayCol")[7].getBoundingClientRect().height;
 			var dayColWd = self.elem.getElementsByClassName("dayCol")[7].getBoundingClientRect().width;
 			var dateLabelHeight = self.elem.getElementsByClassName("dateLabel")[0].getBoundingClientRect().height;
@@ -123,6 +124,8 @@
 			var evtHtOffset = ele.getBoundingClientRect().height+2;
 			var hdrOffset = self.elem.getElementsByClassName("dayHeaderCell")[0].getBoundingClientRect().height;
 			var paddingOffset = Math.floor((dayColHt-dayCellHt)/2);
+			
+			var hPaddingOffset = Math.floor((dayColWd-dayCellWd)/2);
 			
 			var top = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4;
 			var left = 1+paddingOffset+(dayColWd*e.start);
