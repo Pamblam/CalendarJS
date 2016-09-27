@@ -16,13 +16,14 @@
 .CalendarJS{
 	margin:0;
 	padding: 0;
+/*	position: relative;*/
 }
 
 .calHeader{
 	width:100%;
 	color: #2C7EAA;
 	margin:0;
-	padding:0;
+	padding:0 0 2px 0 !important;
 }
 
 .right{
@@ -153,8 +154,11 @@
 
 .clearfix{
 	clear:both;
-	margin:0;
+	margin:-2px 0;
 	padding:1px;
+	height:0;
+	width:0;
+	border:0;
 }
 
 .moTitle{
@@ -210,6 +214,7 @@
 	text-align:center;
 	margin:initial;
 	cursor: pointer;
+	box-sizing: border-box;
 }
 
 .appointment{
@@ -238,6 +243,6 @@
 }
 
 .weekRow{
+	margin:0; padding:0; border:0;
 	position:relative;
-	margin:0; padding:0;
 }

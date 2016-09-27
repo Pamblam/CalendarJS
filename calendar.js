@@ -64,7 +64,6 @@
 		classes += " CalendarJS";
 		self.elem.setAttribute("class", classes);
 		self.drawCalendar();
-		self.elem.insertAdjacentHTML('afterend', "<div class='clearfix'></div>");
 	};
 	
 	// Create a DOM element
@@ -124,6 +123,7 @@
 			
 			var ele = self.elem.getElementsByClassName('calEvent'+i)[0];
 			
+			var calHdrHt = self.elem.getElementsByClassName('calHeader')[0].getBoundingClientRect().height;
 			var dayCellHt = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().height;
 			var dayCellWd = self.elem.getElementsByClassName("dayCell")[0].getBoundingClientRect().width;
 			var dayColHt = self.elem.getElementsByClassName("dayCol")[7].getBoundingClientRect().height;
@@ -136,10 +136,10 @@
 			
 			var hPaddingOffset = Math.floor((dayColWd-dayCellWd)/2);
 			
-			var top = 5+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4;
+			var top = 3+paddingOffset+dateLabelHeight;// 5+hdrOffset+paddingOffset+(dayColHt*e.week)+dateLabelHeight+4+calHdrHt;
 			var left = 1+paddingOffset+(dayColWd*e.start);
 			var width = ((e.end-e.start+1)*dayColWd)-(paddingOffset*3);
-			
+		
 			// used calculate bottom of the display area
 			var bottomBorder = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dayCellHt;
 			
@@ -287,9 +287,12 @@
 			//adjust top position for other events
 			if(posit!==0) top += (evtHtOffset*posit);
 			
-			ele.style.top = top+"px";
-			ele.style.left = left+"px";
-			ele.style.width = width+"px";
+			var h = ele.parentNode.getBoundingClientRect().height; //self.elem.getBoundingClientRect().height;
+			var w = ele.parentNode.getBoundingClientRect().width; //self.elem.getBoundingClientRect().width;
+			ele.style.top = (top/h*100)+"%";
+			
+			ele.style.left = (left/w*100)+"%";
+			ele.style.width = (width/w*100)+"%";
 		}
 		
 		// Draw otherEvents for events that didnt fit in the display
@@ -416,7 +419,7 @@
 		var monthName = self[monthArrayName][self.month];
 		var lastMo = self.monthsAbbr[self.month-1]?self.monthsAbbr[self.month-1]:self.monthsAbbr[11];
 		var nextMo = self.monthsAbbr[self.month+1]?self.monthsAbbr[self.month+1]:self.monthsAbbr[0];
-		self.elem.insertAdjacentHTML('beforeend', "<div class='weekRow calHeader'><div class='lastLink'>&vltri; "+lastMo+"</div><div class='nextLink'>"+nextMo+" &vrtri;</div><div class='moTitle'>"+monthName+" "+year+"</div><div class='clearfix'></div></div>");
+		self.elem.insertAdjacentHTML('beforeend', "<div class='weekRow calHeader'><div class='lastLink'>&vltri; "+lastMo+"</div><div class='nextLink'>"+nextMo+" &vrtri;</div><div class='moTitle'>"+monthName+" "+year+"</div></div>");
 
 		// Draw day labels
 		var dayArrayName = !self.abbrDay ? "daysOfWeekFull" : "daysOfWeekAbbr";
@@ -549,6 +552,10 @@
 			
 		}
 
+		var wks = self.elem.getElementsByClassName("weekRow");
+		for(var i=wks.length; i--;)
+			wks[i].insertAdjacentHTML('beforeend', "<div class='clearfix'></div>");
+		
 		setCalendarEvents();
 		positionEventGroups();
 	};
