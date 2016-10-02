@@ -10,9 +10,9 @@
 	////////////////////////////////////////////////////////////////////////////
 	
 	self.elem = elem;
-	self.abbrDay = false;
-	self.abbrMonth = false;
-	self.abbrYear = false;
+	self.abbrDay = true;
+	self.abbrMonth = true;
+	self.abbrYear = true;
 	self.onDayClick = function(){};
 	self.onEventClick = function(){};
 	self.events = [];
@@ -25,7 +25,7 @@
 	////////////////////////////////////////////////////////////////////////////
 
 	self.daysOfWeekFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	self.daysOfWeekAbbr = ["Sun", "Mon", "Tues", "Wedns", "Thurs", "Fri", "Sat"];
+	self.daysOfWeekAbbr = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 	self.monthsFull = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	self.monthsAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -141,7 +141,7 @@
 			var width = ((e.end-e.start+1)*dayColWd)-(paddingOffset*3);
 		
 			// used calculate bottom of the display area
-			var bottomBorder = 2+hdrOffset+paddingOffset+(dayColHt*e.week)+dayCellHt;
+			var bottomBorder = dayColHt-paddingOffset;
 			
 			// get the lowest event position available for every date in event
 			var posit = false;
@@ -289,8 +289,8 @@
 			
 			var h = ele.parentNode.getBoundingClientRect().height; //self.elem.getBoundingClientRect().height;
 			var w = ele.parentNode.getBoundingClientRect().width; //self.elem.getBoundingClientRect().width;
-			ele.style.top = (top/h*100)+"%";
 			
+			ele.style.top = (top/h*100)+"%";
 			ele.style.left = (left/w*100)+"%";
 			ele.style.width = (width/w*100)+"%";
 		}
@@ -414,7 +414,7 @@
 		var currentWeek = 0;
 
 		// draw title bar
-		var year = self.abbrYear?"'"+self.year.substr(2,2):self.year;
+		var year = self.abbrYear?"'"+(""+self.year).substr(2,2):self.year;
 		var monthArrayName = !self.abbrMonth ? "monthsFull" : "monthsAbbr";
 		var monthName = self[monthArrayName][self.month];
 		var lastMo = self.monthsAbbr[self.month-1]?self.monthsAbbr[self.month-1]:self.monthsAbbr[11];
