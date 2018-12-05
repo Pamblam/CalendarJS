@@ -1,0 +1,25 @@
+{
+  "name": "calendarjs",
+  "version": "1.0.0",
+  "description": "A responsive calendar that does not require jQuery..",
+  "main": "_calendar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://pamblam@github.com/Pamblam/CalendarJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pamblam/CalendarJS/issues"
+  },
+  "homepage": "https://github.com/Pamblam/CalendarJS#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chromedriver": "^2.44.1",
+    "mocha": "^5.2.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}
