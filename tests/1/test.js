@@ -1,68 +1,39 @@
-var webdriver = require('selenium-webdriver');
-var chrome = require('selenium-webdriver/chrome');
-require('chromedriver');
 
-var driver = new webdriver.Builder()
-	.setChromeOptions() // or for headless use: .setChromeOptions(new chrome.Options().headless())
-	.forBrowser('chrome')
-	.build();
+const Tester	= require("../BrowserTester.js");
+const path		= require("path");
+const expect	= require('chai').expect;
 
+const root_path	= path.join(__dirname, '../..');
+const html_path	= '/tests/1/index.html';
+const tester	= new Tester(root_path, html_path);
 
-//driver.get('http://localhost/CalendarJS/tests/1/'); //__dirname+"/index.html");
-driver.get(__dirname+"/index.html");
+describe("Inner Suite 1", function(){
+
+    before(()=>tester.setup(true, false));
+    after(()=>tester.teardown(false));
+
+    it("Regular test", function(){
+		expect(true).to.be.true;
+    });
+
+	it("Browser test", function(done){
+		tester.exec(()=>{
+			return typeof calendar;
+		}).then(data=>{
+			expect(data).to.equal('function');
+			done();
+		});
+    });
 	
-	
-	
-//
-//describe("Inner Suite 1", function(){
-//
-//    before(function(){
-//
-//        // do something before test suite execution
-//        // no matter if there are failed cases
-//
-//    });
-//
-//    after(function(){
-//
-//        // do something after test suite execution is finished
-//        // no matter if there are failed cases
-//
-//    });
-//
-//    beforeEach(function(){
-//
-//        // do something before test case execution
-//        // no matter if there are failed cases
-//
-//    });
-//
-//    afterEach(function(){
-//
-//        // do something after test case execution is finished
-//        // no matter if there are failed cases
-//
-//    });
-//
-//    it("Test-1", function(){
-//
-//        // test Code
-//        // assertions
-//
-//    });
-//
-//    it("Test-2", function(){
-//
-//        // test Code
-//        // assertions
-//
-//    });
-//
-//    it("Test-3", function(){
-//
-//        // test Code
-//        // assertions
-//
-//    });
-//
-//});
+	it("Async browser test", function(done){
+		tester.asyncExec(done=>{
+			setTimeout(()=>{
+				done(typeof calendar);
+			}, 750);
+		}).then(data=>{
+			expect(data).to.equal('function');
+			done();
+		});
+    });
+
+});
