@@ -1,2 +1,3 @@
-/echoslesson/nbproject/private/
-/nbproject/private/
+/nbproject/
+/node_modules/
+package-lock.json
