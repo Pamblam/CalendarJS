@@ -4,7 +4,7 @@
   "description": "A responsive calendar that does not require jQuery..",
   "main": "_calendar.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha -- tests/1/test.js"
   },
   "repository": {
     "type": "git",
@@ -17,12 +17,8 @@
   },
   "homepage": "https://github.com/Pamblam/CalendarJS#readme",
   "devDependencies": {
+    "browser-tester": "^1.0.1",
     "chai": "^4.2.0",
-    "chromedriver": "^2.44.1",
-    "express": "^4.16.4",
-    "istanbul": "^0.4.5",
-    "istanbul-middleware": "^0.2.2",
-    "mocha": "^5.2.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "mocha": "^5.2.0"
   }
 }
