@@ -10,5 +10,3 @@ var opts = {
 	onEventClick: function(event){alert(event.desc);}
 };
 cal = new calendar(ele, opts);
-
-window.butts = "test";
