@@ -1,33 +1,863 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>CalendarJS - Simple Example</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link type="text/css" rel="stylesheet" href='calendar.css' />
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>CalendarJS</title>
+
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link rel='stylesheet' href="calendar.css" type='text/css'>
 		<style>
-			*{ font-family: Verdana, Geneva, sans-serif; }
+			#cal1{ display: none; }
+			.jscolor{ background: white !important; color: black !important; }
+			input[type=range] {
+				height: 32px;
+				-webkit-appearance: none;
+				margin: 10px 0;
+				width: 100%;
+			  }
+			  input[type=range]:focus {
+				outline: none;
+			  }
+			  input[type=range]::-webkit-slider-runnable-track {
+				width: 100%;
+				height: 16px;
+				cursor: pointer;
+				animate: 0.2s;
+				box-shadow: 0px 0px 0px #000000;
+				background: #B6B6B6;
+				border-radius: 25px;
+				border: 1px solid #8A8A8A;
+			  }
+			  input[type=range]::-webkit-slider-thumb {
+				box-shadow: 1px 1px 1px #828282;
+				border: 1px solid #8A8A8A;
+				height: 24px;
+				width: 35px;
+				border-radius: 6px;
+				background: #DADADA;
+				cursor: pointer;
+				-webkit-appearance: none;
+				margin-top: -5px;
+			  }
+			  input[type=range]:focus::-webkit-slider-runnable-track {
+				background: #B6B6B6;
+			  }
+			  input[type=range]::-moz-range-track {
+				width: 100%;
+				height: 16px;
+				cursor: pointer;
+				animate: 0.2s;
+				box-shadow: 0px 0px 0px #000000;
+				background: #B6B6B6;
+				border-radius: 25px;
+				border: 1px solid #8A8A8A;
+			  }
+			  input[type=range]::-moz-range-thumb {
+				box-shadow: 1px 1px 1px #828282;
+				border: 1px solid #8A8A8A;
+				height: 24px;
+				width: 35px;
+				border-radius: 6px;
+				background: #DADADA;
+				cursor: pointer;
+			  }
+			  input[type=range]::-ms-track {
+				width: 100%;
+				height: 16px;
+				cursor: pointer;
+				animate: 0.2s;
+				background: transparent;
+				border-color: transparent;
+				color: transparent;
+			  }
+			  input[type=range]::-ms-fill-lower {
+				background: #B6B6B6;
+				border: 1px solid #8A8A8A;
+				border-radius: 50px;
+				box-shadow: 0px 0px 0px #000000;
+			  }
+			  input[type=range]::-ms-fill-upper {
+				background: #B6B6B6;
+				border: 1px solid #8A8A8A;
+				border-radius: 50px;
+				box-shadow: 0px 0px 0px #000000;
+			  }
+			  input[type=range]::-ms-thumb {
+				margin-top: 1px;
+				box-shadow: 1px 1px 1px #828282;
+				border: 1px solid #8A8A8A;
+				height: 24px;
+				width: 35px;
+				border-radius: 6px;
+				background: #DADADA;
+				cursor: pointer;
+			  }
+			  input[type=range]:focus::-ms-fill-lower {
+				background: #B6B6B6;
+			  }
+			  input[type=range]:focus::-ms-fill-upper {
+				background: #B6B6B6;
+			  }
 		</style>
+		<style id='custom-styles'></style>
+		
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
 	</head>
 	<body>
-		<center>
-			<a href="https://github.com/Pamblam/CalendarJS">For installation and usage, see the GitHub project.</a>
-		</center><br><br>
-		<div id="cal" style="width:50%; margin:0 auto;"></div>
-		<script src="calendar.js"></script>
+		<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="javascript:void(0);">CalendarJS</a>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<h2>CalendarJS</h2>
+					<p>A simple responsive Javascript calendar with no dependencies.</p>
+					<p>CalendarJS is a more general-purpose calendar which can be employed to fit just about any use-case. There are extremely simple examples of Date pickers and event calendars provided below for reference. Note that these examples are only meant as a starting point.</p>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-lg-6">
+					<h3>Simple Example Calendar</h3>
+					<hr>
+					<div id="cal"></div>
+					
+					<h3>Usage</h3><hr>
+					<ol>
+						<li>Include the JS and CSS in your page.
+							<pre><code>&lt;link rel='stylesheet' href="calendar.css"></code></pre>
+							<pre><code>&lt;script src='calendar.js'></script></code></pre>
+						</li>
+						<li>Create a div to draw the calendar in.
+							<pre><code>&lt;div id=calendar>&lt;/div></code></pre>
+						</li>
+						<li>Create the calendar with Javascript
+							<pre><code>var ele = document.getElementById('calendar');
+var opts = {abbrDay: true};
+var cal = new calendar(ele, opts);</code></pre>
+						</li>
+					</ol>
+					
+					<h3>Calendar Options</h3><hr>
+					<ul>
+						<li>options[<b>abbrDay</b>] <i>bool</i>: Abbreviate the day names? default: true</li>
+						<li>options[<b>abbrMonth</b>] <i>bool</i>: Abbreviate the month names? default: true</li>
+						<li>options[<b>abbrYear</b>] <i>bool</i>: Abbreviate the year? default: true</li>
+						<li>options[<b>month</b>] <i>int</i>: The month to show, eg 1 for January, 2 for February, etc. default: the current month</li>
+						<li>options[<b>year</b>] <i>int</i>: The year to show. default: the current year</li>
+						<li>options[<b>ellipse</b>] <i>bool</i>: Ellipsis overflow text? default: true</li>
+						<li>options[<b>events</b>] <i>array</i>: An array of event objects. See below</li>
+						<li>options[<b>onDayClick</b>] <i>function</i>: function to execute when a day is clicked</li>
+						<li>options[<b>onEventClick</b>] <i>function</i>: function to execute when an event is clicked</li>
+					</ul>
+					
+					<h3>Event Options</h3><hr>
+					<ul>
+						<li>event[<b>desc</b>] <i>string</i>: A short description of the event.</li>
+						<li>event[<b>date</b>] <i>date</i>: The date of the event</li>
+						<li>event[<b>startDate</b>] <i>date</i>: The start date of the event, to be used as an alternative to <i>date</i> to be used along with <i>endDate</i>.</li>
+						<li>event[<b>endDate</b>] <i>date</i>: The end date of the event, to be used as an alternative to <i>date</i> to be used along with <i>startDate</i>.</li>
+					</ul>
+					
+					<h3>Methods</h3><hr>
+					<ul>
+						<li>calendar.<b>getSelection</b>(): Get an array of dates that are selected on the calendar.</li>
+						<li>calendar.<b>selectDateRange</b>(date1, date2): Given two date objects, all dates in this range will be selected on the calendar.</li>
+						<li>calendar.<b>selectDate</b>(date): Given a date objects, this date will be selected on the calendar.</li>
+						<li>calendar.<b>clearSelection</b>(): Clear all selected dates on the calendar.</li>
+						<li>calendar.<b>getEventsDuring</b>(date1, date2): Given two date objects, get an array of events listed on the calendar in this range.</li>
+						<li>calendar.<b>loadPreviousMonth</b>(): Show the previous month on the calendar.</li>
+						<li>calendar.<b>loadNextMonth</b>(): Show the next month on the calendar.</li>
+						<li>calendar.<b>addEvent</b>(event): Given an event object, adds the event to the calendar.</li>
+					</ul>
+				</div>
+				<div class="col-lg-6">
+					<h3>Style Settings</h3><hr>
+					<div class="alert alert-info">
+						Adjust the colors to your liking and then copy the provided CSS below the calendar.css file.
+					</div>
+					
+					<div class="panel-group" id="accordion">
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse1" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">All Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='all-color' placeholder="All Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse1" class="panel-collapse collapse in">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="master-spin">Spin All Colors:</label>
+										<input type="range" id="master-spin" name="master-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="master-saturate">Saturate All Colors:</label>
+										<input type="range" id="master-saturate" name="master-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="master-brightness">All Colors Brightness:</label>
+										<input type="range" id="master-brightness" name="master-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='reset-all'>Reset All</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse2" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Event Background Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-evt-color' placeholder="Event Background Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse2" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-evt-color-spin">Spin Event Background Color:</label>
+										<input type="range" id="--cal-evt-color-spin" name="--cal-evt-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-evt-color-saturate">Saturate Event Background Color:</label>
+										<input type="range" id="--cal-evt-color-saturate" name="--cal-evt-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-evt-color-brightness">Event Background Color Brightness:</label>
+										<input type="range" id="--cal-evt-color-brightness" name="--cal-evt-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-evt-color-reset'>Reset Event Background Color</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse3" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Day Background Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-light-color' placeholder="Day Background Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse3" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-light-color-spin">Spin Day Background Colors:</label>
+										<input type="range" id="--cal-light-color-spin" name="--cal-light-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-light-color-saturate">Saturate Day Background Colors:</label>
+										<input type="range" id="--cal-light-color-saturate" name="--cal-light-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-light-color-brightness">Day Background Color Brightness:</label>
+										<input type="range" id="--cal-light-color-brightness" name="--cal-light-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-light-color-reset'>Reset Day Background Colors</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse4" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Non-day & Button BG Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-med-light-color' placeholder="Non-day & Button BG Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse4" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-med-light-color-spin">Spin Non-day & Button BG Colors:</label>
+										<input type="range" id="--cal-med-light-color-spin" name="--cal-med-light-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-med-light-color-saturate">Saturate Non-day & Button BG Colors:</label>
+										<input type="range" id="--cal-med-light-color-saturate" name="--cal-med-light-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-med-light-color-brightness">Non-day & Button BG Color Brightness:</label>
+										<input type="range" id="--cal-med-light-color-brightness" name="--cal-med-light-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-med-light-color-reset'>Reset Non-day & Button BG Colors</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse5" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Border Color</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-med-dark-color' placeholder="Border Color">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse5" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-med-dark-color-spin">Spin Border Color:</label>
+										<input type="range" id="--cal-med-dark-color-spin" name="--cal-med-dark-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-med-dark-color-saturate">Saturate Border Color:</label>
+										<input type="range" id="--cal-med-dark-color-saturate" name="--cal-med-dark-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-med-dark-color-brightness">Border Color Brightness:</label>
+										<input type="range" id="--cal-med-dark-color-brightness" name="--cal-med-dark-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-med-dark-color-reset'>Reset Border Color</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse6" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Text Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-dark-color' placeholder="Text Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse6" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-dark-color-spin">Spin Text Colors:</label>
+										<input type="range" id="--cal-dark-color-spin" name="--cal-dark-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-dark-color-saturate">Saturate Text Colors:</label>
+										<input type="range" id="--cal-dark-color-saturate" name="--cal-dark-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-dark-color-brightness">Text Color Brightness:</label>
+										<input type="range" id="--cal-dark-color-brightness" name="--cal-dark-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-dark-color-reset'>Reset Text Colors</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse7" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Event Text Color</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-black-color' placeholder="Event Text Color">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse7" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-black-color-spin">Spin Event Text Color:</label>
+										<input type="range" id="--cal-black-color-spin" name="--cal-black-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-black-color-saturate">Saturate Event Text Color:</label>
+										<input type="range" id="--cal-black-color-saturate" name="--cal-black-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-black-color-brightness">Black Color Brightness:</label>
+										<input type="range" id="--cal-black-color-brightness" name="--cal-black-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-black-color-reset'>Reset Event Text Color</button> 
+								</div>
+							</div>
+						</div>
+						
+					</div>				
+					
+					<div class="form-group">
+						<label for="styles">CSS: </label>
+						<textarea class="form-control" rows="5" id="styles"></textarea>
+					</div>
+					
+					<h3>Examples</h3><hr>
+					
+					<div class="panel-group" id="accordion2">
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion2" href="#collapse10" style='color: black; text-decoration: none;'>
+									<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Simple Event Calendar</h4>
+								</a>
+							</div>
+							<div id="collapse10" class="panel-collapse collapse in">
+								<div class="panel-body">
+									<div id="cal3"></div>
+									<hr>
+									<b>Code</b>
+									<pre><code>var div = document.getElementById('cal3');
+var cal = new calendar(div, {
+	year: 2019,
+	month: 6,
+	events: [{
+		desc: 'Bonnaroo',
+		startDate: new Date(2019, 5, 13),
+		endDate: new Date(2019, 5, 16)
+	}]
+});</code></pre>
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion2" href="#collapse8" style='color: black; text-decoration: none;'>
+									<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Simple Date Picker</h4>
+								</a>
+							</div>
+							<div id="collapse8" class="panel-collapse collapse">
+								<div class="panel-body">
+									<input type="text" id="date-picker" placeholder="Date Picker">
+									<div id="cal1"></div>
+									<hr>
+									<b>Code</b>
+									<pre><code>var input = document.getElementById('date-picker');
+var div = document.getElementById('cal1');
+var cal = new calendar(div, {
+	onDayClick: function(date){
+		input.value = date.toLocaleDateString();
+		cal.clearSelection(date);
+		cal.selectDate(date);
+		div.style.display= 'none';
+	}
+});
+input.addEventListener('focus', function(){
+	div.style.display= 'block';
+});</code></pre>
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion2" href="#collapse9" style='color: black; text-decoration: none;'>
+									<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Simple Date Range Picker</h4>
+								</a>
+							</div>
+							<div id="collapse9" class="panel-collapse collapse">
+								<div class="panel-body">
+									<input type="text" id="date-range-picker-start" placeholder="Start Date">
+									<input type="text" id="date-range-picker-end" placeholder="End Date">
+									<div id="cal2"></div>
+									<hr>
+									<b>Code</b>
+									<pre><code>var startinput = document.getElementById('date-range-picker-start');
+var endinput = document.getElementById('date-range-picker-end');
+var div = document.getElementById('cal2');
+var start_date, end_date;
+var cal = new calendar(div, {
+	onDayClick: function(date){
+		if(start_date && end_date){ 
+			cal.clearSelection(date);
+			start_date = end_date = null;
+		}else if(start_date){
+			cal.clearSelection(date);
+			cal.selectDateRange(start_date, date);
+			end_date = date;
+			endinput.value = date.toLocaleDateString();
+		}else{
+			cal.selectDate(date);
+			start_date = date;
+			startinput.value = date.toLocaleDateString();
+		}
+	}
+});</code></pre>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+
+		<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src='calendar.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/color-scheme/1.0.1/color-scheme.js'></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.js"></script>
 		<script>
-			var cal = null;
-			var ele = document.getElementById('cal');			
-			var opts = {
-				events: [{date: new Date(2016, 8, 11), desc:"My Birthday!"}],
-				abbrDay: true,
-				abbrMonth:true, 
-				month: 9, 
-				year: 2016,
-				onDayClick: function(date){cal.selectDate(date);},
-				onEventClick: function(event){alert(event.desc);}
+			
+			(function(){
+				var div = document.getElementById('cal3');
+				var cal = new calendar(div, {
+					year: 2019,
+					month: 6,
+					events: [{
+						desc: 'Bonnaroo',
+						startDate: new Date(2019, 5, 13),
+						endDate: new Date(2019, 5, 16)
+					}]
+				});
+			})();
+			
+			(function(){
+				var input = document.getElementById('date-picker');
+				var div = document.getElementById('cal1');
+				var cal = new calendar(div, {
+					onDayClick: function(date){
+						input.value = date.toLocaleDateString();
+						cal.clearSelection(date);
+						cal.selectDate(date);
+						div.style.display= 'none';
+					}
+				});
+				input.addEventListener('focus', function(){
+					div.style.display= 'block';
+				});
+			})();
+			
+			(function(){
+				var startinput = document.getElementById('date-range-picker-start');
+				var endinput = document.getElementById('date-range-picker-end');
+				var div = document.getElementById('cal2');
+				var start_date, end_date;
+				var cal = new calendar(div, {
+					onDayClick: function(date){
+						if(start_date && end_date){ 
+							cal.clearSelection(date);
+							start_date = end_date = null;
+						}else if(start_date){
+							cal.clearSelection(date);
+							cal.selectDateRange(start_date, date);
+							end_date = date;
+							endinput.value = date.toLocaleDateString();
+						}else{
+							cal.selectDate(date);
+							start_date = date;
+							startinput.value = date.toLocaleDateString();
+						}
+					}
+				});
+			})();
+			
+			
+			var orig_colors = {
+				'--cal-evt-color': 'rgba(0, 153, 153, .4)',
+				'--cal-light-color': 'rgba(184, 230, 255, 1)',
+				'--cal-med-light-color': 'rgba(159, 221, 255, 1)',
+				'--cal-med-dark-color': 'rgba(127, 210, 255, 1)',
+				'--cal-dark-color': 'rgba(44, 126, 170, 1)',
+				'--cal-black-color': 'rgba(33, 33, 33, 1)'
 			};
-			cal = new calendar(ele, opts);
+			
+			var colors = {};
+			Object.keys(orig_colors).forEach(k=>{
+				colors[k] = orig_colors[k];
+			});
+			
+			$("#reset-all").click(()=>{
+				var functs = ['spin', 'saturate', 'brightness'];
+				Object.keys(orig_colors).forEach(k=>{
+					colors[k] = orig_colors[k];
+					$("#"+k).val(colors[k]);
+					functs.forEach(f=>{
+						$("#"+k+"-"+f).val(0);
+					});
+					setColor(k);
+				});
+				functs.forEach(f=>{
+					$("#master-"+f).val(0);
+				});
+				setColors();
+			});
+			
+			$('#master-spin').on('input', function(e){
+				Object.keys(colors).forEach(k=>{
+					spinColor(k, this.value);
+				});
+				setColors();
+			});
+			$('#master-saturate').on('input', function(e){
+				Object.keys(colors).forEach(k=>{
+					saturateColor(k, this.value);
+				});
+				setColors();
+			});
+			$('#master-brightness').on('input', function(e){
+				Object.keys(colors).forEach(k=>{
+					brightenColor(k, this.value);
+				});
+				setColors();
+			});
+			
+			Object.keys(colors).forEach(key=>{
+				$("#"+key).on('change blur', function(e){
+					this.jscolor.hide();
+					setTimeout(()=>{
+						var color = tinycolor(this.value);
+						if(!color.isValid()) color = tinycolor(colors[key]);
+						colors[key] = color.toRgbString();
+						setColor(key);
+						setColors();
+					}, 50);
+				});
+				$("#"+key+"-spin").on('input', function(e){
+					spinColor(key, this.value);
+					setColor(key);
+					setColors();
+				});
+				$("#"+key+"-saturate").on('input', function(e){
+					saturateColor(key, this.value);
+					setColor(key);
+					setColors();
+				});
+				$("#"+key+"-brightness").on('input', function(e){
+					brightenColor(key, this.value);
+					setColor(key);
+					setColors();
+				});
+				$("#"+key+"-reset").on('click', function(e){
+					var functs = ['spin', 'saturate', 'brightness'];
+					colors[key] = orig_colors[key];
+					$("#"+key).val(colors[key]);
+					functs.forEach(f=>{
+						$("#"+key+"-"+f).val(0);
+					});
+					setColor(key);
+					setColors();
+				});
+			});
+			
+			$("#all-color").on('change blur', function(e){
+				this.jscolor.hide();
+				setTimeout(()=>{
+					var hue = tinycolor(this.value);
+					if(!hue.isValid()){
+						this.value = '';
+						return;
+					}
+					this.value = tinycolor(this.value).toRgbString();
+					hue = hue.toHsl().h;
+					var scheme = new ColorScheme;
+					scheme.from_hue(hue).scheme('contrast').variation('default');
+					var c = scheme.colors();
+					colors['--cal-evt-color'] = tinycolor('#'+c[6]).toRgbString();
+					colors['--cal-light-color'] = tinycolor('#'+c[2]).toRgbString();
+					colors['--cal-med-light-color'] = tinycolor('#'+c[3]).toRgbString();
+					colors['--cal-med-dark-color'] = tinycolor('#'+c[0]).toRgbString();
+					colors['--cal-dark-color'] = tinycolor('#'+c[1]).toRgbString();
+					var functs = ['spin', 'saturate', 'brightness'];
+					Object.keys(colors).forEach(k=>{
+						$("#"+k).val(colors[k]);
+						functs.forEach(f=>{
+							$("#"+k+"-"+f).val(0);
+						});
+						setColor(k);
+					});
+					functs.forEach(f=>{
+						$("#master-"+f).val(0);
+					});
+					setColors();
+				}, 50);					
+			});
+			
+			Object.keys(orig_colors).forEach(setColor);
+			drawCalendar();
+			setColors();
+			
+			function setColor(key){
+				$("#"+key).val(colors[key]);
+				$("#"+key).parent().parent().parent().parent().css('background-color', colors[key]);
+			}
+			
+			function saturateColor(key, saturation){
+				saturation = +saturation;
+				var funct = saturation > 0 ? 'saturate' : 'desaturate';
+				var level = Math.abs(saturation);
+				colors[key] = tinycolor(colors[key])[funct](level).toRgbString();
+				setColor(key);
+			}
+			
+			function brightenColor(key, brightness){
+				brightness = +brightness;
+				var funct = brightness > 0 ? 'brighten' : 'darken';
+				var level = Math.abs(brightness);
+				colors[key] = tinycolor(colors[key])[funct](level).toRgbString();
+				setColor(key);
+			}
+			
+			function spinColor(key, spin){
+				colors[key] = tinycolor(colors[key]).spin(+spin).toRgbString();
+				setColor(key);
+			}
+			
+			function setColors(){
+				var style = document.getElementById('custom-styles');
+				var css = `
+				:root {
+					--cal-light-color: ${colors['--cal-light-color']};
+					--cal-med-light-color: ${colors['--cal-med-light-color']};
+					--cal-med-dark-color: ${colors['--cal-med-dark-color']};
+					--cal-dark-color: ${colors['--cal-dark-color']};
+					--cal-black-color: ${colors['--cal-black-color']};
+					--cal-evt-color: ${colors['--cal-evt-color']};
+				}
+
+				.cjs-dayCol{
+					background-color: var(--cal-light-color);
+				}
+
+				.cjs-dayHeader{
+					background-color: var(--cal-light-color);
+					color: var(--cal-dark-color);
+				}
+
+				.cjs-active{
+					background: var(--cal-med-dark-color);
+					border-color: var(--cal-light-color);
+				}
+
+				.cjs-blankday{
+					background-color: var(--cal-med-light-color);
+				}
+
+				.cjs-lastLink{
+					background: var(--cal-med-light-color);
+					color: var(--cal-dark-color);
+					border: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-nextLink{
+					background: var(--cal-med-light-color);
+					color: var(--cal-dark-color);
+					border: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-calDay:hover{
+					background: var(--cal-med-light-color);
+				}
+
+				.cjs-right{
+					border-right: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-top{
+					border-top: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-left{
+					border-left: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-bottom{
+					border-bottom: 1px solid var(--cal-med-dark-color);
+				}
+
+				.cjs-otherEvents{
+					background: var(--cal-med-dark-color);
+					color: var(--cal-black-color);
+				}
+
+				.cjs-calHeader{
+					color: var(--cal-dark-color);
+				}
+
+				.cjs-dayContent{
+					color: var(--cal-dark-color);
+				}
+
+				.cjs-calEvent{
+					background: var(--cal-evt-color);
+					color: var(--cal-black-color);
+				}`;
+				var styles = document.createTextNode(css);
+				while (style.lastChild) style.removeChild(style.lastChild);
+				style.appendChild(styles);
+				$("#styles").val(css.replace(/\s\s+/g, ' '));
+			}
+			
+			function drawCalendar(){
+				var cal = null;
+				var ele = document.getElementById('cal');			
+				var opts = {
+					events: [{date: new Date(2016, 8, 11), desc:"My Birthday!"}],
+					abbrDay: true,
+					abbrMonth:true, 
+					month: 9, 
+					year: 2016,
+					onDayClick: function(date){cal.selectDate(date);},
+					onEventClick: function(event){alert(event.desc);}
+				};
+				cal = new calendar(ele, opts);
+			}
 		</script>
 	</body>
 </html>

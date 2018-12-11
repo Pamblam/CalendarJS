@@ -1,66 +1,37 @@
-# CalendarJS
 
-A responsive calendar that does not require jQuery.. 
+<h2>CalendarJS</h2>
+<p>A simple responsive Javascript calendar with no dependencies.</p>
+<p>CalendarJS is a more general-purpose calendar which can be employed to fit just about any use-case. There are extremely simple examples of Date pickers and event calendars provided below for reference. Note that these examples are only meant as a starting point.</p>
 
-## Usage
+<h3>Calendar Options</h3><hr>
+<ul>
+	<li>options[<b>abbrDay</b>] <i>bool</i>: Abbreviate the day names? default: true</li>
+	<li>options[<b>abbrMonth</b>] <i>bool</i>: Abbreviate the month names? default: true</li>
+	<li>options[<b>abbrYear</b>] <i>bool</i>: Abbreviate the year? default: true</li>
+	<li>options[<b>month</b>] <i>int</i>: The month to show, eg 1 for January, 2 for February, etc. default: the current month</li>
+	<li>options[<b>year</b>] <i>int</i>: The year to show. default: the current year</li>
+	<li>options[<b>ellipse</b>] <i>bool</i>: Ellipsis overflow text? default: true</li>
+	<li>options[<b>events</b>] <i>array</i>: An array of event objects. See below</li>
+	<li>options[<b>onDayClick</b>] <i>function</i>: function to execute when a day is clicked</li>
+	<li>options[<b>onEventClick</b>] <i>function</i>: function to execute when an event is clicked</li>
+</ul>
 
-**HTML**
+<h3>Event Options</h3><hr>
+<ul>
+	<li>event[<b>desc</b>] <i>string</i>: A short description of the event.</li>
+	<li>event[<b>date</b>] <i>date</i>: The date of the event</li>
+	<li>event[<b>startDate</b>] <i>date</i>: The start date of the event, to be used as an alternative to <i>date</i> to be used along with <i>endDate</i>.</li>
+	<li>event[<b>endDate</b>] <i>date</i>: The end date of the event, to be used as an alternative to <i>date</i> to be used along with <i>startDate</i>.</li>
+</ul>
 
-     <div id='cal'></div>
-
-**Javascript**
-
-      var options = {abbrDay: true};
-      var element = document.getElementById('cal');
-      new calendar(element, options);
-      
-## Options
-
-  **abbrDay**
-  abbreviate the days on the calendar? Default: true.
-
-**abbrMonth**
-abbreviate the months? Default: true.
-
-**abbrYear**
-use a 2 digit year? Default: true.
-
-**onDayClick**
-a function that is called when the user click on a day. The date clicked is passed to this function.
-
-**onEventClick**
-a function that is called when the user clicks on an event. The event clicked is passed to this function.
-
-**events**
-an array of events to be displayed on the calendar. (see below)
-
-**month**
-the month of the calendar to display (`0` for January, `11` for December). Default is the current month.
-
-**year**
-the 4 digit year to show on the calendar. Default is the current year.
-
-**ellipse**
-ellipse overflowed text? Default is true.
-
-## Events
-
-To add events to the calendar you must pass an array of event objects to the `events` option. All events must have a 'desc' property and either a 'date' property or a 'startDate' and 'endDate' property.
-
-### Event Options
-
-**desc**
-a short description of the event. (string)
-
-**date**
-the date of the event if it is a one day event. (JS Date object)
-
-**startDate**
-the start date of the event if it is a multiple day event. (JS Date object)
-
-**endDate**
-the end date of the event if it is a multiple day event. (JS Date object)
-
-<hr>
-
-See the index page for an example.
+<h3>Methods</h3><hr>
+<ul>
+	<li>calendar.<b>getSelection</b>(): Get an array of dates that are selected on the calendar.</li>
+	<li>calendar.<b>selectDateRange</b>(date1, date2): Given two date objects, all dates in this range will be selected on the calendar.</li>
+	<li>calendar.<b>selectDate</b>(date): Given a date objects, this date will be selected on the calendar.</li>
+	<li>calendar.<b>clearSelection</b>(): Clear all selected dates on the calendar.</li>
+	<li>calendar.<b>getEventsDuring</b>(date1, date2): Given two date objects, get an array of events listed on the calendar in this range.</li>
+	<li>calendar.<b>loadPreviousMonth</b>(): Show the previous month on the calendar.</li>
+	<li>calendar.<b>loadNextMonth</b>(): Show the next month on the calendar.</li>
+	<li>calendar.<b>addEvent</b>(event): Given an event object, adds the event to the calendar.</li>
+</ul>
