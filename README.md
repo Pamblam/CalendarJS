@@ -1,7 +1,9 @@
 
-<h2>CalendarJS</h2>
+<h2><a href='https://pamblam.github.io/CalendarJS/'>CalendarJS</a></h2>
 <p>A simple responsive Javascript calendar with no dependencies.</p>
-<p>CalendarJS is a more general-purpose calendar which can be employed to fit just about any use-case. There are extremely simple examples of Date pickers and event calendars provided below for reference. Note that these examples are only meant as a starting point.</p>
+<p>CalendarJS is a general-purpose calendar which can be employed to fit just about any use-case from event calendars, to date pickers and date-range pickers.</p>
+
+<p><b><a href='https://pamblam.github.io/CalendarJS/'>Refer to the man page for examples and styling.</a></b></p>
 
 <h3>Calendar Options</h3><hr>
 <ul>
@@ -35,3 +37,13 @@
 	<li>calendar.<b>loadNextMonth</b>(): Show the next month on the calendar.</li>
 	<li>calendar.<b>addEvent</b>(event): Given an event object, adds the event to the calendar.</li>
 </ul>
+
+<h3>License</h3><hr>
+
+Copyright 2018 Rob Parham
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
