@@ -161,6 +161,7 @@ var cal = new calendar(ele, opts);</code></pre>
 						<li>options[<b>events</b>] <i>array</i>: An array of event objects. See below</li>
 						<li>options[<b>onDayClick</b>] <i>function</i>: function to execute when a day is clicked</li>
 						<li>options[<b>onEventClick</b>] <i>function</i>: function to execute when an event is clicked</li>
+						<li>options[<b>onMonthChanged</b>] <i>function</i>: function to execute when the month is changed</li>
 					</ul>
 					
 					<h3>Event Options</h3><hr>
@@ -301,13 +302,13 @@ var cal = new calendar(ele, opts);</code></pre>
 								<div class='row'>
 									<div class='col-xs-6'>
 										<a data-toggle="collapse" data-parent="#accordion" href="#collapse4" style='color: black; text-decoration: none;'>
-											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Non-day & Button BG Colors</h4>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Non-day & Hover BG Colors</h4>
 										</a>
 									</div>
 									<div class='col-xs-6'>
 										<div class="input-group input-group-sm">
 											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
-											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-med-light-color' placeholder="Non-day & Button BG Colors">
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-med-light-color' placeholder="Non-day & Hover BG Colors">
 										</div>
 									</div>
 								</div>
@@ -315,18 +316,18 @@ var cal = new calendar(ele, opts);</code></pre>
 							<div id="collapse4" class="panel-collapse collapse">
 								<div class="panel-body">
 									<div class="form-group">
-										<label for="--cal-med-light-color-spin">Spin Non-day & Button BG Colors:</label>
+										<label for="--cal-med-light-color-spin">Spin Non-day & Hover BG Colors:</label>
 										<input type="range" id="--cal-med-light-color-spin" name="--cal-med-light-color-spin" value=0 min="-360" max="360">
 									</div>
 									<div class="form-group">
-										<label for="--cal-med-light-color-saturate">Saturate Non-day & Button BG Colors:</label>
+										<label for="--cal-med-light-color-saturate">Saturate Non-day & Hover BG Colors:</label>
 										<input type="range" id="--cal-med-light-color-saturate" name="--cal-med-light-color-saturate" value=0 min="-100" max="100">
 									</div>
 									<div class="form-group">
-										<label for="--cal-med-light-color-brightness">Non-day & Button BG Color Brightness:</label>
+										<label for="--cal-med-light-color-brightness">Non-day & Hover Color Brightness:</label>
 										<input type="range" id="--cal-med-light-color-brightness" name="--cal-med-light-color-brightness" value=0 min="-100" max="100">
 									</div>
-									<button type="button" class="btn btn-primary btn-block" id='--cal-med-light-color-reset'>Reset Non-day & Button BG Colors</button> 
+									<button type="button" class="btn btn-primary btn-block" id='--cal-med-light-color-reset'>Reset Non-day & Hover Colors</button> 
 								</div>
 							</div>
 						</div>
@@ -432,6 +433,76 @@ var cal = new calendar(ele, opts);</code></pre>
 										<input type="range" id="--cal-black-color-brightness" name="--cal-black-color-brightness" value=0 min="-100" max="100">
 									</div>
 									<button type="button" class="btn btn-primary btn-block" id='--cal-black-color-reset'>Reset Event Text Color</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse8" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Active Color</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-active-color' placeholder="Active Color">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse8" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-active-color-spin">Spin Active Color:</label>
+										<input type="range" id="--cal-active-color-spin" name="--cal-active-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-active-color-saturate">Saturate Active Color:</label>
+										<input type="range" id="--cal-active-color-saturate" name="--cal-active-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-active-color-brightness">Active Color Brightness:</label>
+										<input type="range" id="--cal-active-color-brightness" name="--cal-active-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-active-color-reset'>Reset Border Color</button> 
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class='row'>
+									<div class='col-xs-6'>
+										<a data-toggle="collapse" data-parent="#accordion" href="#collapse9" style='color: black; text-decoration: none;'>
+											<h4 class="panel-title" style="line-height: 2em; text-shadow: 1px 1px 0px rgba(252, 252, 252, 1);">Button BG Colors</h4>
+										</a>
+									</div>
+									<div class='col-xs-6'>
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon"><span class='glyphicon glyphicon-pencil'></span></span>
+											<input type="text" class="jscolor {hash:true, required:false, refine:false} form-control" id='--cal-button-bg-color' placeholder="Button BG Colors">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="collapse9" class="panel-collapse collapse">
+								<div class="panel-body">
+									<div class="form-group">
+										<label for="--cal-button-bg-color-spin">Spin Button BG Colors:</label>
+										<input type="range" id="--cal-button-bg-color-spin" name="--cal-button-bg-color-spin" value=0 min="-360" max="360">
+									</div>
+									<div class="form-group">
+										<label for="--cal-button-bg-color-saturate">Saturate Button BG Colors:</label>
+										<input type="range" id="--cal-button-bg-color-saturate" name="--cal-button-bg-color-saturate" value=0 min="-100" max="100">
+									</div>
+									<div class="form-group">
+										<label for="--cal-button-bg-color-brightness">Button Color Brightness:</label>
+										<input type="range" id="--cal-button-bg-color-brightness" name="--cal-button-bg-color-brightness" value=0 min="-100" max="100">
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id='--cal-button-bg-color-reset'>Reset Button Colors</button> 
 								</div>
 							</div>
 						</div>
@@ -615,7 +686,9 @@ var cal = new calendar(div, {
 				'--cal-med-light-color': 'rgba(159, 221, 255, 1)',
 				'--cal-med-dark-color': 'rgba(127, 210, 255, 1)',
 				'--cal-dark-color': 'rgba(44, 126, 170, 1)',
-				'--cal-black-color': 'rgba(33, 33, 33, 1)'
+				'--cal-black-color': 'rgba(33, 33, 33, 1)',
+				'--cal-active-color': 'rgba(127, 210, 255, 1)',
+				'--cal-button-bg-color': 'rgba(184, 230, 255, 1)'
 			};
 			
 			var colors = {};
@@ -713,7 +786,9 @@ var cal = new calendar(div, {
 					colors['--cal-light-color'] = tinycolor('#'+c[2]).toRgbString();
 					colors['--cal-med-light-color'] = tinycolor('#'+c[3]).toRgbString();
 					colors['--cal-med-dark-color'] = tinycolor('#'+c[0]).toRgbString();
+					colors['--cal-active-color'] = tinycolor('#'+c[0]).toRgbString();
 					colors['--cal-dark-color'] = tinycolor('#'+c[1]).toRgbString();
+					colors['--cal-button-bg-color'] = tinycolor('#'+c[3]).toRgbString();
 					var functs = ['spin', 'saturate', 'brightness'];
 					Object.keys(colors).forEach(k=>{
 						$("#"+k).val(colors[k]);
@@ -769,6 +844,8 @@ var cal = new calendar(div, {
 					--cal-dark-color: ${colors['--cal-dark-color']};
 					--cal-black-color: ${colors['--cal-black-color']};
 					--cal-evt-color: ${colors['--cal-evt-color']};
+					--cal-active-color: ${colors['--cal-active-color']};
+					--cal-button-bg-color: ${colors['--cal-button-bg-color']};
 				}
 
 				.cjs-dayCol{
@@ -781,7 +858,7 @@ var cal = new calendar(div, {
 				}
 
 				.cjs-active{
-					background: var(--cal-med-dark-color);
+					background: var(--cal-active-color);
 					border-color: var(--cal-light-color);
 				}
 
@@ -790,13 +867,13 @@ var cal = new calendar(div, {
 				}
 
 				.cjs-lastLink{
-					background: var(--cal-med-light-color);
+					background: var(--cal-button-bg-color);
 					color: var(--cal-dark-color);
 					border: 1px solid var(--cal-med-dark-color);
 				}
 
 				.cjs-nextLink{
-					background: var(--cal-med-light-color);
+					background: var(--cal-button-bg-color);
 					color: var(--cal-dark-color);
 					border: 1px solid var(--cal-med-dark-color);
 				}
@@ -854,7 +931,8 @@ var cal = new calendar(div, {
 					month: 9, 
 					year: 2016,
 					onDayClick: function(date){cal.selectDate(date);},
-					onEventClick: function(event){alert(event.desc);}
+					onEventClick: function(event){alert(event.desc);},
+					onMonthChanged: function(m, y){ console.log(m, y); }
 				};
 				cal = new calendar(ele, opts);
 			}

@@ -52,6 +52,7 @@
 			this.abbrYear = opts.hasOwnProperty('abbrYear') ? opts.abbrYear : true;
 			this.onDayClick = opts.onDayClick || function(){};
 			this.onEventClick = opts.onEventClick || function(){};
+			this.onMonthChanged = opts.onMonthChanged || function(){};
 			this.events = [];
 			this.month = opts.hasOwnProperty('month') ? opts.month-1 : (new Date()).getMonth();
 			this.year = opts.hasOwnProperty('year') ? opts.year : (new Date()).getFullYear();
@@ -77,13 +78,13 @@
 					if(this.events[evtids[i]]!==undefined) 
 						evts.push(this.events[evtids[i]]);
 				var date = new Date(this.year, this.month, e.target.getAttribute('data-day'));
-				this.onDayClick(date, evts);
+				this.onDayClick.call(this, date, evts);
 			}.bind(this);
 			
 			this._eventClicked = function(e){
 				var target = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target;
 				var evtid = target.getAttribute('data-eventid');
-				this.onEventClick(this.events[evtid]);
+				this.onEventClick.call(this, this.events[evtid]);
 			}.bind(this);
 			
 			this.drawCalendar();
@@ -117,6 +118,7 @@
 			this.month = this.month - 1 > -1 ? this.month - 1 : 11;
 			if (this.month === 11) this.year--;
 			this.drawCalendar();
+			this.onMonthChanged.call(this, this.month+1, this.year);
 			return this;
 		}
 		
@@ -128,6 +130,7 @@
 			this.month = this.month + 1 > 11 ? 0 : this.month+1;
 			if(this.month===0) this.year++;
 			this.drawCalendar();
+			this.onMonthChanged.call(this, this.month+1, this.year);
 			return this;
 		}
 		
