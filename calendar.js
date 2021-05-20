@@ -47,12 +47,14 @@
 			this._eventGroups = [];
 			this.selectedDates = [];
 			this.elem = elem;
+			this.disabledDates = (opts.disabledDates || []).map(d=>this.formatDateMMDDYY(d));
 			this.abbrDay = opts.hasOwnProperty('abbrDay') ? opts.abbrDay : true;
 			this.abbrMonth = opts.hasOwnProperty('abbrMonth') ? opts.abbrMonth : true;
 			this.abbrYear = opts.hasOwnProperty('abbrYear') ? opts.abbrYear : true;
 			this.onDayClick = opts.onDayClick || function(){};
 			this.onEventClick = opts.onEventClick || function(){};
 			this.onMonthChanged = opts.onMonthChanged || function(){};
+			this.beforeDraw = (opts.beforeDraw || function(){}).bind(this);
 			this.events = [];
 			this.month = opts.hasOwnProperty('month') ? opts.month-1 : (new Date()).getMonth();
 			this.year = opts.hasOwnProperty('year') ? opts.year : (new Date()).getFullYear();
@@ -91,11 +93,34 @@
 		}
 		
 		/**
+		 * Add a date to the disabled dates list
+		 * @param {type} date
+		 * @returns {undefined}
+		 */
+		disableDate(date){
+			var formatted = this.formatDateMMDDYY(date);
+			if(!this.disabledDates.includes(formatted)){
+				this.disabledDates.push(formatted);
+			}
+		}
+		
+		/**
+		 * Given a Date object, format and return date string in format MM/DD/YYYY (without leading zeroes)
+		 * @param {Date} date
+		 * @returns {String}
+		 */
+		formatDateMMDDYY(date){
+			return (date.getMonth() + 1) + "/" +
+					date.getDate() + "/" +
+					date.getFullYear();
+		}
+		
+		/**
 		 * Add an event to the calendar
 		 * @param {object} evt
 		 * @returns {Calendar instance}
 		 */
-		addEvent(evt, draw=true){
+		async addEvent(evt, draw=true){
 			var hasDesc = (evt.hasOwnProperty("desc")),
 				hasDate = (evt.hasOwnProperty("date")),
 				hasStartDate = (evt.hasOwnProperty("startDate")),
@@ -106,7 +131,7 @@
 					else throw new Error("Start date must occur before end date.");
 				}else this.events.push(evt);
 			}else throw new Error("All events must have a 'desc' property and either a 'date' property or a 'startDate' and 'endDate' property");
-			if(draw) this.drawCalendar();
+			if(draw) await this.drawCalendar();
 			return this;
 		}
 		
@@ -114,10 +139,10 @@
 		 * Load the next month to the calendar
 		 * @returns {Calendar instance}
 		 */
-		loadNextMonth () {
+		async loadNextMonth () {
 			this.month = this.month - 1 > -1 ? this.month - 1 : 11;
 			if (this.month === 11) this.year--;
-			this.drawCalendar();
+			await this.drawCalendar();
 			this.onMonthChanged.call(this, this.month+1, this.year);
 			return this;
 		}
@@ -126,10 +151,10 @@
 		 * Load the previous month to the calendar
 		 * @returns {Calendar instance}
 		 */
-		loadPreviousMonth(){
+		async loadPreviousMonth(){
 			this.month = this.month + 1 > 11 ? 0 : this.month+1;
 			if(this.month===0) this.year++;
-			this.drawCalendar();
+			await this.drawCalendar();
 			this.onMonthChanged.call(this, this.month+1, this.year);
 			return this;
 		}
@@ -225,10 +250,26 @@
 		}
 		
 		/**
+		 * Get current month as object that contains month and year
+		 * @returns {calendarcalendar.Calendar.getCurrentMonth.calendarAnonym$1}
+		 */
+		getCurrentMonth(){
+			return {
+				month: this.month +1,
+				year: this.year
+			}
+		}
+		
+		/**
 		 * Draw the calendar instance
 		 * @returns {calendarcalendar.Calendar@call;_setCalendarEvents@call;_positionEventGroups}
 		 */
-		drawCalendar(){ 
+		async drawCalendar(){ 
+			if(typeof this.beforeDraw === 'function'){
+				await this.beforeDraw();
+			}
+			
+			
 			// clear the element
 			this.elem.innerHTML = "";
 			this._eventGroups = [];
@@ -302,6 +343,8 @@
 							}
 						}
 					}
+					
+					var isDisabled = this.disabledDates.includes(`${this.month + 1}/${currentDate}/${this.year}`);
 					var directionalClass = "";
 					if(currentDay===6) directionalClass = " cjs-right";
 					if((lastDate-currentDate)<7){
@@ -309,7 +352,7 @@
 						if(currentDay===6&&currentDate===lastDate) directionalClass += " cjs-bottom-right";
 					} 
 					// draw day
-					week.insertAdjacentHTML('beforeend', "<div class='cjs-dayCol cjs-bottom cjs-left"+directionalClass+"'><div class='cjs-dayContent'><div class='cjs-dayTable'><div class='cjs-dayCell cjs-calDay cjs-dayCell"+currentDate+"' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='cjs-dateLabel'>"+currentDate+"</span> </div></div></div></div>");
+					week.insertAdjacentHTML('beforeend', "<div class='cjs-dayCol cjs-bottom cjs-left"+directionalClass+" "+(isDisabled ? 'cjs-blankday' : '')+"'><div class='cjs-dayContent'><div class='cjs-dayTable'><div class='cjs-dayCell "+(isDisabled ? '' : 'cjs-calDay')+" cjs-dayCell"+currentDate+"' data-day='"+currentDate+"' data-events='"+(evtids.join(","))+"'><span class='cjs-dateLabel'>"+currentDate+"</span> </div></div></div></div>");
 					currentDate++;
 					currentDay++;
 				}

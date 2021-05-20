@@ -67,9 +67,11 @@ var cal = new calendar(ele, opts);</code></pre>
 						<li>options[<b>year</b>] <i>int</i>: The year to show. default: the current year</li>
 						<li>options[<b>ellipse</b>] <i>bool</i>: Ellipsis overflow text? default: true</li>
 						<li>options[<b>events</b>] <i>array</i>: An array of event objects. See below</li>
+						<li>options[<b>disabledDates</b>] <i>array</i>: An array of Date objects that will not be selectable</li>
 						<li>options[<b>onDayClick</b>] <i>function</i>: function to execute when a day is clicked</li>
 						<li>options[<b>onEventClick</b>] <i>function</i>: function to execute when an event is clicked</li>
 						<li>options[<b>onMonthChanged</b>] <i>function</i>: function to execute when the month is changed</li>
+						<li>options[<b>beforeDraw</b>] <i>function</i>: function to execute before drawing the calendar. will await if async/promise.</li>
 					</ul>
 					
 					<h3>Event Options</h3><hr>
@@ -83,6 +85,7 @@ var cal = new calendar(ele, opts);</code></pre>
 					<h3>Methods</h3><hr>
 					<ul>
 						<li>calendar.<b>getSelection</b>(): Get an array of dates that are selected on the calendar.</li>
+						<li>calendar.<b>disableDate</b>(date): Disable the provided date from selection.</li>
 						<li>calendar.<b>selectDateRange</b>(date1, date2): Given two date objects, all dates in this range will be selected on the calendar.</li>
 						<li>calendar.<b>selectDate</b>(date): Given a date objects, this date will be selected on the calendar.</li>
 						<li>calendar.<b>clearSelection</b>(): Clear all selected dates on the calendar.</li>
@@ -90,6 +93,7 @@ var cal = new calendar(ele, opts);</code></pre>
 						<li>calendar.<b>loadPreviousMonth</b>(): Show the previous month on the calendar.</li>
 						<li>calendar.<b>loadNextMonth</b>(): Show the next month on the calendar.</li>
 						<li>calendar.<b>addEvent</b>(event): Given an event object, adds the event to the calendar.</li>
+						<li>calendar.<b>getCurrentMonth</b>(): Get an object with the calendar's current month and year.</li>
 					</ul>
 				</div>
 				<div class="col-lg-6">
